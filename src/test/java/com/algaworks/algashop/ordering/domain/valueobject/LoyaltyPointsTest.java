@@ -3,8 +3,6 @@ package com.algaworks.algashop.ordering.domain.valueobject;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class LoyaltyPointsTest {
 
     @Test
@@ -28,10 +26,10 @@ class LoyaltyPointsTest {
     }
 
     @Test
-    void compareTo() {
-    }
-
-    @Test
-    void value() {
+    void shouldNotAddZeroValue() {
+        LoyaltyPoints loyaltyPoints = new LoyaltyPoints(10);
+        Assertions.assertThatExceptionOfType(IllegalArgumentException.class)
+                .isThrownBy(() -> loyaltyPoints.add(0));
+        Assertions.assertThat(loyaltyPoints.value()).isEqualTo(10);
     }
 }

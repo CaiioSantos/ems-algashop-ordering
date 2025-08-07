@@ -4,29 +4,30 @@ import java.util.Objects;
 
 public record LoyaltyPoints(Integer value) implements Comparable<LoyaltyPoints> {
 
+    public static final LoyaltyPoints ZERO = new LoyaltyPoints(0);
+
     public LoyaltyPoints() {
         this(0);
     }
 
-    public LoyaltyPoints(Integer value) {
+    public LoyaltyPoints {
         Objects.requireNonNull(value);
-        if (value < 0){
+        if (value < 0) {
             throw new IllegalArgumentException();
         }
-        this.value = value;
     }
 
-    public LoyaltyPoints add(Integer value){
-    return add(new LoyaltyPoints(value));
-
+    public LoyaltyPoints add(Integer value) {
+        return add(new LoyaltyPoints(value));
     }
 
-    public LoyaltyPoints add(LoyaltyPoints loyaltyPoints){
+    public LoyaltyPoints add(LoyaltyPoints loyaltyPoints) {
         Objects.requireNonNull(loyaltyPoints);
-        if (loyaltyPoints.value <0) {
+        if (loyaltyPoints.value() <= 0) {
             throw new IllegalArgumentException();
         }
-        return new LoyaltyPoints(this.value + loyaltyPoints.value());
+
+        return new LoyaltyPoints(this.value() + loyaltyPoints.value());
     }
 
     @Override
@@ -36,6 +37,6 @@ public record LoyaltyPoints(Integer value) implements Comparable<LoyaltyPoints> 
 
     @Override
     public int compareTo(LoyaltyPoints o) {
-        return this.value.compareTo(o.value);
+        return this.value().compareTo(o.value());
     }
 }
