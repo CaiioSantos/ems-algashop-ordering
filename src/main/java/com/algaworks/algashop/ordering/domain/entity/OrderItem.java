@@ -1,6 +1,7 @@
 package com.algaworks.algashop.ordering.domain.entity;
 
 import com.algaworks.algashop.ordering.domain.valueobject.Money;
+import com.algaworks.algashop.ordering.domain.valueobject.Product;
 import com.algaworks.algashop.ordering.domain.valueobject.ProductName;
 import com.algaworks.algashop.ordering.domain.valueobject.Quantity;
 import com.algaworks.algashop.ordering.domain.valueobject.id.OrderId;
@@ -37,17 +38,29 @@ public class OrderItem {
 
     @Builder(builderClassName = "BrandNewOrderItemBuilder", builderMethodName = "brandNew")
     private static OrderItem CreateBrandNew(OrderId orderId,
-                                     ProductId productId,ProductName productName,
-                                     Money price, Quantity quantity) {
-        return new OrderItem(
+                                            Product product, Quantity quantity) {
+
+        Objects.requireNonNull(orderId);
+        Objects.requireNonNull(product);
+        Objects.requireNonNull(quantity);
+        OrderItem orderItem = new OrderItem(
                 new OrderItemId(),
                 orderId,
-                productId,
-                productName,
-                price,
+                product.id(),
+                product.name(),
+                product.price(),
                 quantity,
                 Money.ZERO
         );
+        orderItem.recalculateTotals();
+
+        return orderItem;
+    }
+
+     void changeQuantity(Quantity quantity) {
+        Objects.requireNonNull(quantity);
+        this.setQuantity(quantity);
+        this.recalculateTotals();
     }
 
     public OrderItemId id() {
@@ -78,6 +91,9 @@ public class OrderItem {
         return totalAmount;
     }
 
+    private void recalculateTotals() {
+        this.setTotalAmount(this.price().multiply(this.quantity()));
+    }
     private void setId(OrderItemId id) {
         Objects.requireNonNull(id);
         this.id = id;
@@ -123,4 +139,5 @@ public class OrderItem {
     public int hashCode() {
         return Objects.hashCode(id);
     }
+
 }

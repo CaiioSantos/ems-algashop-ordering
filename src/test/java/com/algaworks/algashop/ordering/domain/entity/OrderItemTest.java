@@ -14,11 +14,9 @@ class OrderItemTest {
     @Test
     public void souldGenerate() {
         OrderItem.brandNew()
-                .productId(new ProductId())
+                .product(ProductTestDataBuilder.aProduct().build())
                 .quantity(new Quantity(1))
                 .orderId(new OrderId())
-                .productName(new ProductName("Teclado"))
-                .price(new Money("100"))
                 .build();
     }
 }
