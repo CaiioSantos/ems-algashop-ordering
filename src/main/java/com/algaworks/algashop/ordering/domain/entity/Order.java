@@ -1,23 +1,16 @@
 package com.algaworks.algashop.ordering.domain.entity;
 
-import com.algaworks.algashop.ordering.domain.exceptions.OrderCannotBePlacedException;
-import com.algaworks.algashop.ordering.domain.exceptions.OrderDoesNotContainOrderItemException;
-import com.algaworks.algashop.ordering.domain.exceptions.OrderInvalidShippingDeliveryDateException;
-import com.algaworks.algashop.ordering.domain.exceptions.OrderStatusCannotBeChangedException;
+import com.algaworks.algashop.ordering.domain.exceptions.*;
 import com.algaworks.algashop.ordering.domain.valueobject.*;
 import com.algaworks.algashop.ordering.domain.valueobject.id.CustomerId;
 import com.algaworks.algashop.ordering.domain.valueobject.id.OrderId;
 import com.algaworks.algashop.ordering.domain.valueobject.id.OrderItemId;
-import com.algaworks.algashop.ordering.domain.valueobject.id.ProductId;
 import lombok.Builder;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 public class Order {
 
@@ -32,7 +25,7 @@ public class Order {
     private OffsetDateTime canceledAt;
     private OffsetDateTime readyAt;
 
-    private BillingInfo billing;
+    private Billing billing;
     private Shipping shipping;
 
     private OrderStatus status;
@@ -44,7 +37,7 @@ public class Order {
     @Builder(builderClassName = "ExistingOrderBuilder", builderMethodName = "existing")
     public Order(OrderId id, CustomerId customerId, Money totalAmount,
                  Quantity totalItems, OffsetDateTime placedAt, OffsetDateTime paidAt,
-                 OffsetDateTime canceledAt, OffsetDateTime readyAt, BillingInfo billing,
+                 OffsetDateTime canceledAt, OffsetDateTime readyAt, Billing billing,
                  Shipping shipping,OrderStatus status, PaymentMethod paymentMethod,
                  Set<OrderItem> items) {
 
@@ -82,8 +75,10 @@ public class Order {
     }
 
     public void addItem(Product product,  Quantity quantity) {
+        this.verifyIfChangeable();
         Objects.requireNonNull(product);
         Objects.requireNonNull(quantity);
+
 
         product.checkOutOfStock();
 
@@ -113,18 +108,20 @@ public class Order {
     }
 
     public void changePaymentMethod(PaymentMethod paymentMethod) {
+        this.verifyIfChangeable();
         Objects.requireNonNull(paymentMethod);
         this.setPaymentMethod(paymentMethod);
     }
 
-    public void  changeBilling(BillingInfo billing) {
+    public void  changeBilling(Billing billing) {
+        this.verifyIfChangeable();
         Objects.requireNonNull(billing);
         this.setBilling(billing);
     }
 
     public void changeShipping (Shipping newShipping) {
+        this.verifyIfChangeable();
         Objects.requireNonNull(newShipping);
-
         if (newShipping.expectedDate().isBefore(LocalDate.now())) {
             throw new OrderInvalidShippingDeliveryDateException(this.id());
         }
@@ -134,9 +131,9 @@ public class Order {
     }
 
     public void changeItemQuantity(OrderItemId orderItemId, Quantity quantity) {
+        this.verifyIfChangeable();
         Objects.requireNonNull(orderItemId);
         Objects.requireNonNull(quantity);
-
         OrderItem orderItem = this.findOrderItem(orderItemId);
         orderItem.changeQuantity(quantity);
 
@@ -187,7 +184,7 @@ public class Order {
         return readyAt;
     }
 
-    public BillingInfo billing() {
+    public Billing billing() {
         return billing;
     }
 
@@ -259,6 +256,20 @@ public class Order {
                 .findFirst()
                 .orElseThrow(() -> new OrderDoesNotContainOrderItemException(this.id(), orderItemId));
     }
+    private void verifyIfChangeable() {
+        if(!isDrasft()){
+            throw new OrderCannotBeEditedException(this.id(), this.status());
+        }
+    }
+
+    public void removeItem(OrderItemId orderItemId){
+        this.verifyIfChangeable();
+        Objects.requireNonNull(orderItemId);
+        OrderItem itemToRemove = this.findOrderItem(orderItemId);
+        this.items.remove(itemToRemove);
+        this.recalculateTotal();
+
+    }
 
 
     private void setId(OrderId id) {
@@ -297,7 +308,7 @@ public class Order {
         this.readyAt = readyAt;
     }
 
-    private void setBilling(BillingInfo billing) {
+    private void setBilling(Billing billing) {
         this.billing = billing;
     }
 

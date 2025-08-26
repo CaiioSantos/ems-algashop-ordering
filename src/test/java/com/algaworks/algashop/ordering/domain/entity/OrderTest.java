@@ -8,7 +8,6 @@ import com.algaworks.algashop.ordering.domain.valueobject.id.CustomerId;
 import com.algaworks.algashop.ordering.domain.valueobject.id.ProductId;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.mockito.internal.matchers.Or;
 
 import java.time.LocalDate;
 import java.util.Set;
@@ -16,8 +15,26 @@ import java.util.Set;
 class OrderTest {
 
     @Test
-    public void shouldGenerate() {
-        Order order = Order.draft(new CustomerId());
+    public void shouldGenerateDraftOrder() {
+        CustomerId customerId = new CustomerId();
+        Order order = Order.draft(customerId);
+
+        Assertions.assertWith(order,
+                o -> Assertions.assertThat(o.id()).isNotNull(),
+                o -> Assertions.assertThat(o.customerId()).isEqualTo(customerId),
+                o -> Assertions.assertThat(o.totalAmount()).isEqualTo(Money.ZERO),
+                o -> Assertions.assertThat(o.totalItens()).isEqualTo(Quantity.ZERO),
+                o -> Assertions.assertThat(o.isDrasft()).isTrue(),
+                o -> Assertions.assertThat(o.items()).isEmpty(),
+
+                o -> Assertions.assertThat(o.placedAt()).isNull(),
+                o -> Assertions.assertThat(o.paidAt()).isNull(),
+                o -> Assertions.assertThat(o.canceledAt()).isNull(),
+                o -> Assertions.assertThat(o.readyAt()).isNull(),
+                o -> Assertions.assertThat(o.billing()).isNull(),
+                o -> Assertions.assertThat(o.shipping()).isNull(),
+                o -> Assertions.assertThat(o.paymentMethod()).isNull()
+                );
     }
 
     @Test
@@ -105,34 +122,13 @@ class OrderTest {
     }
 
     @Test
-    public void givenDraftOrder_whenChangeBillingInfo_shouldAllwChange() {
-        Address address = Address.builder()
-                .street("Fragoso")
-                .number("255")
-                .neighborhood("rua goiana")
-                .city("Olinda")
-                .state("Pernambuco")
-                .zipCode(new ZipCode("53250"))
-                .build();
+    public void givenDraftOrder_whenChangeBilling_shouldAllwChange() {
 
-        BillingInfo billingInfo =  BillingInfo.builder()
-                .address(address)
-                .document(new Document("111-222-333-55"))
-                .phone(new Phone("99-66551-1445"))
-                .fullName(new FullName("Jose", "Pardal"))
-                .build();
-
+        Billing billing =  OrderTestDataBuilder.aBilling();
         Order order = Order.draft(new CustomerId());
-        order.changeBilling(billingInfo);
+        order.changeBilling(billing);
 
-        BillingInfo billingInfo2 =  BillingInfo.builder()
-                .address(address)
-                .document(new Document("111-222-333-55"))
-                .phone(new Phone("99-66551-1445"))
-                .fullName(new FullName("Jose", "Pardal"))
-                .build();
-
-        Assertions.assertThat(order.billing()).isEqualTo(billingInfo2);
+        Assertions.assertThat(order.billing()).isEqualTo(billing);
     }
 
     @Test
