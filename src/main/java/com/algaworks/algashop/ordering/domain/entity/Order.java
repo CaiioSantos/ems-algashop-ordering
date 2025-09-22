@@ -12,7 +12,7 @@ import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.*;
 
-public class Order {
+public class Order implements AggregateRoot<OrderId> {
 
     private OrderId id;
     private CustomerId customerId;

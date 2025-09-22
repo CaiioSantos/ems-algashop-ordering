@@ -12,7 +12,7 @@ import java.util.UUID;
 import static com.algaworks.algashop.ordering.domain.exceptions.ErrorMessages.*;
 import static com.algaworks.algashop.ordering.domain.valueobject.LoyaltyPoints.ZERO;
 
-public class Customer {
+public class Customer implements AggregateRoot<CustomerId> {
 
     private CustomerId id;
     private FullName fullName;
