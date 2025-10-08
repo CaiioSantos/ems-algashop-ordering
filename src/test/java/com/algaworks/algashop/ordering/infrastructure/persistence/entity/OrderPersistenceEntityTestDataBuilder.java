@@ -5,6 +5,8 @@ import com.algaworks.algashop.ordering.infrastructure.persistence.entity.OrderPe
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
+import java.util.Set;
+
 
 public class OrderPersistenceEntityTestDataBuilder {
 
@@ -19,6 +21,28 @@ public class OrderPersistenceEntityTestDataBuilder {
                 .totalAmount(new BigDecimal(1000))
                 .status("DRAFT")
                 .paymentMethod("CREDIT_CARD")
-                .placedAt(OffsetDateTime.now());
+                .placedAt(OffsetDateTime.now())
+                .items(Set.of(
+                        existingItem().build(),
+                        existingItemAlt().build()
+                ));
+    }
+    public static OrderItemPersistenceEntity.OrderItemPersistenceEntityBuilder existingItem(){
+        return OrderItemPersistenceEntity.builder()
+                .id(IdGenerator.generateTSID().toLong())
+                .price(new BigDecimal(500))
+                .quantity(2)
+                .totalAmount(new BigDecimal(1000))
+                .productName("Notebook")
+                .productId(IdGenerator.generateTimeBasedUUID());
+    }
+    public static OrderItemPersistenceEntity.OrderItemPersistenceEntityBuilder existingItemAlt(){
+        return OrderItemPersistenceEntity.builder()
+                .id(IdGenerator.generateTSID().toLong())
+                .price(new BigDecimal(200))
+                .quantity(5)
+                .totalAmount(new BigDecimal(1050))
+                .productName("RAM")
+                .productId(IdGenerator.generateTimeBasedUUID());
     }
 }
