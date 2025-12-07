@@ -44,7 +44,8 @@ public class ShoppingCart implements AggregateRoot<ShoppingCartId> {
         items.clear();
     }
     public void removeItem(ShoppingCartItemId cartItemId){
-        items.removeIf(i -> i.id().equals(cartItemId));
+        ShoppingCartItem shoppingCartItem = this.findItem(cartItemId);
+        this.items.remove(shoppingCartItem);
         this.recalculateTotals();
     }
     public void addItem(Product product, Quantity quantity){

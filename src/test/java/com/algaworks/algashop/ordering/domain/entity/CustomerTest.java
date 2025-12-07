@@ -18,12 +18,12 @@ class CustomerTest {
     void testInvalidEmailCreateException(){
 
         Assertions.assertThatExceptionOfType(IllegalArgumentException.class)
-                .isThrownBy(()-> CustomertestDataBuilder.brandNewCustomer().email(new Email("invalid")).build());
+                .isThrownBy(()-> CustomerTestDataBuilder.brandNewCustomer().email(new Email("invalid")).build());
     }
 
     @Test
     void testInvalidEmailUpdateException(){
-        Customer customer = CustomertestDataBuilder.brandNewCustomer().build();
+        Customer customer = CustomerTestDataBuilder.brandNewCustomer().build();
 
         Assertions.assertThatExceptionOfType(IllegalArgumentException.class)
                 .isThrownBy(()-> {
@@ -33,7 +33,7 @@ class CustomerTest {
 
     @Test
     void unarchivedCUstomerTest() {
-        Customer customer = CustomertestDataBuilder.existingCustomer().build();
+        Customer customer = CustomerTestDataBuilder.existingCustomer().build();
 
         customer.archive();
 
@@ -47,7 +47,7 @@ class CustomerTest {
                 c -> assertThat(c.address()).isEqualTo(Address.builder()
                         .street("Bourbon Street")
                         .number("Anonymized")
-                        .neighborhood("Noth Ville")
+                        .neighborhood("North Ville")
                         .city("York")
                         .state("South California")
                         .zipCode(new ZipCode("12345"))
@@ -58,7 +58,7 @@ class CustomerTest {
 
     @Test
     void unarchivedCustomerTestException(){
-        Customer customer = CustomertestDataBuilder.existing().build();
+        Customer customer = CustomerTestDataBuilder.existingAnonymizedCustomer().build();
 
         Assertions.assertThatExceptionOfType(CustomerArchivedException.class)
                 .isThrownBy(customer::archive);
@@ -78,7 +78,7 @@ class CustomerTest {
 
     @Test
     void unArchivedNewCustomerAddloyalPointsTest() {
-        Customer customer = CustomertestDataBuilder.brandNewCustomer().build();
+        Customer customer = CustomerTestDataBuilder.brandNewCustomer().build();
 
         customer.addloyaltyPoints(new LoyaltyPoints(10));
         customer.addloyaltyPoints(new LoyaltyPoints(20));
@@ -89,7 +89,7 @@ class CustomerTest {
 
     @Test
     void unArchivedNewCustomerAddloyalPointsTestException() {
-        Customer customer = CustomertestDataBuilder.brandNewCustomer().build();
+        Customer customer = CustomerTestDataBuilder.brandNewCustomer().build();
 
         Assertions.assertThatExceptionOfType(IllegalArgumentException.class)
                 .isThrownBy(() -> customer.addloyaltyPoints(new LoyaltyPoints(0)));

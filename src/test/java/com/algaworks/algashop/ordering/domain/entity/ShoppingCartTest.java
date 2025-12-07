@@ -81,6 +81,9 @@ class ShoppingCartTest {
 
         Assertions.assertThatExceptionOfType(ShoppingCartDoesNotContainItemException.class)
                 .isThrownBy(() -> cart.removeItem(randomId));
+
+        Assertions.assertThatExceptionOfType(ShoppingCartDoesNotContainItemException.class)
+                .isThrownBy(() -> cart.removeItem(randomId));
     }
 
     @Test

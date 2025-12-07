@@ -1,6 +1,7 @@
 package com.algaworks.algashop.ordering.infrastructure.persistence.assembler;
 
 import com.algaworks.algashop.ordering.domain.entity.Order;
+import com.algaworks.algashop.ordering.domain.entity.OrderItem;
 import com.algaworks.algashop.ordering.domain.valueobject.Address;
 import com.algaworks.algashop.ordering.domain.valueobject.Billing;
 import com.algaworks.algashop.ordering.domain.valueobject.Recipient;
@@ -9,19 +10,30 @@ import com.algaworks.algashop.ordering.infrastructure.persistence.embeddable.Add
 import com.algaworks.algashop.ordering.infrastructure.persistence.embeddable.BillingEmbeddable;
 import com.algaworks.algashop.ordering.infrastructure.persistence.embeddable.RecipientEmbeddable;
 import com.algaworks.algashop.ordering.infrastructure.persistence.embeddable.ShippingEmbeddable;
+import com.algaworks.algashop.ordering.infrastructure.persistence.entity.CustomerPersistenceEntity;
+import com.algaworks.algashop.ordering.infrastructure.persistence.entity.OrderItemPersistenceEntity;
 import com.algaworks.algashop.ordering.infrastructure.persistence.entity.OrderPersistenceEntity;
+import com.algaworks.algashop.ordering.infrastructure.persistence.repository.CustomerPersistenceEntityRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 @Component
+@RequiredArgsConstructor
 public class OrderPersistenceEntityAssembler {
-    
+
+    private final CustomerPersistenceEntityRepository customerPersistenceEntityRepository;
+
     public OrderPersistenceEntity fromDomain(Order order) {
         return this.merge(new  OrderPersistenceEntity(), order);
     }
 
     public OrderPersistenceEntity merge(OrderPersistenceEntity orderPersistenceEntity, Order order) {
         orderPersistenceEntity.setId(order.id().value().toLong());
-        orderPersistenceEntity.setCustomerId(order.customerId().value());
         orderPersistenceEntity.setTotalAmount(order.totalAmount().value());
         orderPersistenceEntity.setTotaItems(order.totalItens().value());
         orderPersistenceEntity.setStatus(order.status().name());
@@ -31,7 +43,49 @@ public class OrderPersistenceEntityAssembler {
         orderPersistenceEntity.setCanceledAt(order.canceledAt());
         orderPersistenceEntity.setReadyAt(order.readyAt());
         orderPersistenceEntity.setVersion(order.version());
+
+        Set<OrderItemPersistenceEntity> mergeItens =  this.mergeItens(order, orderPersistenceEntity);
+        orderPersistenceEntity.replaceItems(mergeItens);
+
+        var customerPersistenceEntity = customerPersistenceEntityRepository.getReferenceById(order.customerId().value());
+        orderPersistenceEntity.setCustomer(customerPersistenceEntity);
         return orderPersistenceEntity;
+    }
+
+    private Set<OrderItemPersistenceEntity> mergeItens(Order order, OrderPersistenceEntity orderPersistenceEntity) {
+        Set<OrderItem> orderItemsUpdate = order.items();
+        if (orderItemsUpdate == null || orderItemsUpdate.isEmpty()){
+            return new HashSet<>();
+        }
+        Set<OrderItemPersistenceEntity> existingItens = orderPersistenceEntity.getItems();
+        if (existingItens == null || existingItens.isEmpty()){
+            return orderItemsUpdate.stream()
+                    .map(orderItem -> fromDomain(orderItem))
+                    .collect(Collectors.toSet());
+        }
+        Map<Long, OrderItemPersistenceEntity> existingItemMap = existingItens.stream()
+                .collect(Collectors.toMap(OrderItemPersistenceEntity::getId, item -> item));
+        return orderItemsUpdate.stream()
+                .map(orderItem -> {
+                    OrderItemPersistenceEntity itemPersistence = existingItemMap.getOrDefault(
+                            orderItem.id().value().toLong(), new OrderItemPersistenceEntity()
+            );
+                    return merge(itemPersistence, orderItem);
+        }).collect(Collectors.toSet());
+    }
+
+    public OrderItemPersistenceEntity fromDomain(OrderItem orderItem) {
+       return merge(new OrderItemPersistenceEntity(), orderItem);
+    }
+
+    private OrderItemPersistenceEntity merge(OrderItemPersistenceEntity orderItemPersistenceEntity, OrderItem orderItem) {
+        orderItemPersistenceEntity.setId(orderItem.id().value().toLong());
+        orderItemPersistenceEntity.setProductId(orderItem.productId().value());
+        orderItemPersistenceEntity.setProductName(orderItem.productName().value());
+        orderItemPersistenceEntity.setPrice(orderItem.price().value());
+        orderItemPersistenceEntity.setQuantity(orderItem.quantity().value());
+        orderItemPersistenceEntity.setTotalAmount(orderItem.totalAmount().value());
+        return orderItemPersistenceEntity;
     }
 
     private BillingEmbeddable toBillingEmbeddable(Billing billing) {

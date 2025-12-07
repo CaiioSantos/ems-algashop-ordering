@@ -5,9 +5,11 @@ import com.algaworks.algashop.ordering.domain.valueobject.id.CustomerId;
 
 import java.time.LocalDate;
 
+import static com.algaworks.algashop.ordering.domain.entity.CustomerTestDataBuilder.DEFAULT_CUSTOMER_ID;
+
 public class OrderTestDataBuilder {
 
-    private CustomerId customerId = new CustomerId();
+    private CustomerId customerId = DEFAULT_CUSTOMER_ID;
     private PaymentMethod paymentMethod = PaymentMethod.GATEWAY_BALANCE;
     private Shipping shipping = aShipping();
     private Billing billing = aBilling();
@@ -33,7 +35,7 @@ public class OrderTestDataBuilder {
         order.changePaymentMethod(paymentMethod);
 
         if (withItems) {
-            order.addItem(ProductTestDataBuilder.aProductAltRamMemory().build(), new Quantity(2));
+            order.addItem(ProductTestDataBuilder.aProductAltRamMemory().build(), new Quantity(1));
             order.addItem(ProductTestDataBuilder.aProduct().build(), new Quantity(2));
         }
 
@@ -49,6 +51,9 @@ public class OrderTestDataBuilder {
                 order.markAsPaid();
             }
             case READY -> {
+                order.place();
+                order.markAsPaid();
+                order.markAsReady();
             }
             case CANCELED -> {
             }
