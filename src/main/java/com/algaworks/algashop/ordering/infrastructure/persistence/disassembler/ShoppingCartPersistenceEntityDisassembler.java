@@ -11,8 +11,6 @@ import com.algaworks.algashop.ordering.domain.valueobject.id.ShoppingCartId;
 import com.algaworks.algashop.ordering.domain.valueobject.id.ShoppingCartItemId;
 import com.algaworks.algashop.ordering.infrastructure.persistence.entity.ShoppingCartItemPersistenceEntity;
 import com.algaworks.algashop.ordering.infrastructure.persistence.entity.ShoppingCartPersistenceEntity;
-import com.algaworks.algashop.ordering.infrastructure.persistence.repository.CustomerPersistenceEntityRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.Set;

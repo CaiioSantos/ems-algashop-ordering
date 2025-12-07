@@ -39,7 +39,7 @@ public class ShoppingCartPersistenceEntity {
     private Integer totalItems;
     private OffsetDateTime createAt;
 
-    @OneToMany(mappedBy = "shoppingCart", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "shoppingCart", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<ShoppingCartItemPersistenceEntity> items = new HashSet<>();
 
     @Version
