@@ -15,4 +15,5 @@ public interface ShoppingCarts extends RemoveCapableRepository<ShoppingCart, Sho
 //            where customerId = :customerId
 //            """)
     Optional<ShoppingCart> ofCustomer(@Param("customerId") CustomerId customerId);
+
 }

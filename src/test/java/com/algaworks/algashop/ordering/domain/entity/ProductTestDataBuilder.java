@@ -21,7 +21,7 @@ public class ProductTestDataBuilder {
 
     public static Product.ProductBuilder aProductUnavailable() {
         return Product.builder()
-                .id(DEFAULT_PRODUCT_ID)
+                .id(new ProductId())
                 .inStock(false)
                 .name(new ProductName("GalaxyBook"))
                 .price(new Money("5000"));
@@ -29,7 +29,7 @@ public class ProductTestDataBuilder {
 
     public static Product.ProductBuilder aProductAltProcessor() {
         return Product.builder()
-                .id(DEFAULT_PRODUCT_ID)
+                .id(new ProductId())
                 .inStock(true)
                 .name(new ProductName("Core 7 ultra"))
                 .price(new Money("2000"));
@@ -37,7 +37,7 @@ public class ProductTestDataBuilder {
 
     public static Product.ProductBuilder aProductAltRamMemory() {
         return Product.builder()
-                .id(DEFAULT_PRODUCT_ID)
+                .id(new ProductId())
                 .inStock(true)
                 .name(new ProductName("RAM 8GB"))
                 .price(new Money("200"));

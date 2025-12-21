@@ -23,9 +23,10 @@ public class ShoppingCart implements AggregateRoot<ShoppingCartId> {
 
     private Set<ShoppingCartItem> items;
 
+    private Long version;
 
     @Builder(builderClassName = "ExistingShoppingCartBuilder", builderMethodName = "existing")
-    public ShoppingCart(ShoppingCartId id, CustomerId customerId, Money totalAmount,
+    public ShoppingCart(ShoppingCartId id, Long version, CustomerId customerId, Money totalAmount,
                  Quantity totalItems, OffsetDateTime createAt,Set<ShoppingCartItem> items) {
         this.setId(id);
         this.setCustomerId(customerId);
@@ -35,7 +36,7 @@ public class ShoppingCart implements AggregateRoot<ShoppingCartId> {
         this.setItems(items);
     }
     public static ShoppingCart startShopping(CustomerId customerId){
-        return new ShoppingCart(new ShoppingCartId(), customerId, Money.ZERO, Quantity.ZERO, OffsetDateTime.now(), new HashSet<>());
+        return new ShoppingCart(new ShoppingCartId(),null , customerId, Money.ZERO, Quantity.ZERO, OffsetDateTime.now(), new HashSet<>());
     }
 
     public void empty(){
@@ -137,6 +138,10 @@ public class ShoppingCart implements AggregateRoot<ShoppingCartId> {
         return items;
     }
 
+    public Long version() {
+        return version;
+    }
+
     private void updateItem(ShoppingCartItem shoppingCartItem, Product product, Quantity quantity) {
         shoppingCartItem.refresh(product);
         shoppingCartItem.changeQuantity(shoppingCartItem.quantity().add(quantity));
@@ -176,4 +181,22 @@ public class ShoppingCart implements AggregateRoot<ShoppingCartId> {
     public void setItems(Set<ShoppingCartItem> items) {
         this.items = items;
     }
+
+    private void setVersion(Long version) {
+        this.version = version;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ShoppingCart that = (ShoppingCart) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
 }

@@ -27,7 +27,7 @@ class CustomerTest {
 
         Assertions.assertThatExceptionOfType(IllegalArgumentException.class)
                 .isThrownBy(()-> {
-                    customer.changeEmail("invalid");
+                    customer.changeEmail(new Email("invalid"));
                 });
     }
 
@@ -64,7 +64,7 @@ class CustomerTest {
                 .isThrownBy(customer::archive);
 
         Assertions.assertThatExceptionOfType(CustomerArchivedException.class)
-                .isThrownBy(() -> customer.changeEmail("email@teste.com"));
+                .isThrownBy(() -> customer.changeEmail(new Email("email@teste.com")));
 
         Assertions.assertThatExceptionOfType(CustomerArchivedException.class)
                 .isThrownBy(() -> customer.changePhone("123-123-1111"));
@@ -91,7 +91,7 @@ class CustomerTest {
     void unArchivedNewCustomerAddloyalPointsTestException() {
         Customer customer = CustomerTestDataBuilder.brandNewCustomer().build();
 
-        Assertions.assertThatExceptionOfType(IllegalArgumentException.class)
+        Assertions.assertThatNoException()
                 .isThrownBy(() -> customer.addloyaltyPoints(new LoyaltyPoints(0)));
 
         Assertions.assertThatExceptionOfType(IllegalArgumentException.class)

@@ -69,6 +69,9 @@ public class Customer implements AggregateRoot<CustomerId> {
 
     public void addloyaltyPoints (LoyaltyPoints loyaltyPointsAdded) {
         verifyIfChangeable();
+        if (loyaltyPointsAdded.equals(LoyaltyPoints.ZERO)){
+            return;
+        }
         this.setLoyaltyPoints(this.loyaltyPoints().add(loyaltyPointsAdded));
     }
 
@@ -101,9 +104,9 @@ public class Customer implements AggregateRoot<CustomerId> {
         this.setFullName(fullName);
     }
 
-    public void changeEmail(String email) {
+    public void changeEmail(Email email) {
         this.verifyIfChangeable();
-        this.setEmail(new Email(email));
+        this.setEmail(email);
     }
 
     public void changePhone(String phone) {
