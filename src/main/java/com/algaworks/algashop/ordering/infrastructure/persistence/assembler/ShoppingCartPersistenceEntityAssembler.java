@@ -1,7 +1,7 @@
 package com.algaworks.algashop.ordering.infrastructure.persistence.assembler;
 
-import com.algaworks.algashop.ordering.domain.entity.ShoppingCart;
-import com.algaworks.algashop.ordering.domain.entity.ShoppingCartItem;
+import com.algaworks.algashop.ordering.domain.shoppingcart.ShoppingCart;
+import com.algaworks.algashop.ordering.domain.shoppingcart.ShoppingCartItem;
 import com.algaworks.algashop.ordering.infrastructure.persistence.entity.ShoppingCartItemPersistenceEntity;
 import com.algaworks.algashop.ordering.infrastructure.persistence.entity.ShoppingCartPersistenceEntity;
 import com.algaworks.algashop.ordering.infrastructure.persistence.repository.CustomerPersistenceEntityRepository;

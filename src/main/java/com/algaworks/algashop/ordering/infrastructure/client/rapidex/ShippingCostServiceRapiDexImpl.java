@@ -1,10 +1,9 @@
 package com.algaworks.algashop.ordering.infrastructure.client.rapidex;
 
-import com.algaworks.algashop.ordering.domain.service.ShippingCostService;
-import com.algaworks.algashop.ordering.domain.valueobject.Money;
+import com.algaworks.algashop.ordering.domain.order.shipping.ShippingCostService;
+import com.algaworks.algashop.ordering.domain.commons.Money;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.context.annotation.Conditional;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -25,7 +24,7 @@ public class ShippingCostServiceRapiDexImpl implements ShippingCostService {
                 )
         );
 
-        LocalDate expectedDeliveryDate = LocalDate.now().plusDays(response.getEstimatedDaysToDeliver().longValue());
+        LocalDate expectedDeliveryDate = LocalDate.now().plusDays(response.getEstimatedDaysToDeliver());
 
         return CalculationResult.builder()
                 .cost(new Money(response.getDeliveryCost()))

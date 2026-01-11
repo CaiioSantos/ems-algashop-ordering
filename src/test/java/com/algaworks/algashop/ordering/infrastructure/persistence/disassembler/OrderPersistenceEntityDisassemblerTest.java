@@ -1,13 +1,13 @@
 package com.algaworks.algashop.ordering.infrastructure.persistence.disassembler;
 
 
-import com.algaworks.algashop.ordering.domain.entity.Order;
-import com.algaworks.algashop.ordering.domain.entity.OrderStatus;
-import com.algaworks.algashop.ordering.domain.entity.PaymentMethod;
-import com.algaworks.algashop.ordering.domain.valueobject.Money;
-import com.algaworks.algashop.ordering.domain.valueobject.Quantity;
-import com.algaworks.algashop.ordering.domain.valueobject.id.CustomerId;
-import com.algaworks.algashop.ordering.domain.valueobject.id.OrderId;
+import com.algaworks.algashop.ordering.domain.order.Order;
+import com.algaworks.algashop.ordering.domain.order.OrderStatus;
+import com.algaworks.algashop.ordering.domain.order.PaymentMethod;
+import com.algaworks.algashop.ordering.domain.commons.Money;
+import com.algaworks.algashop.ordering.domain.commons.Quantity;
+import com.algaworks.algashop.ordering.domain.customer.CustomerId;
+import com.algaworks.algashop.ordering.domain.order.OrderId;
 import com.algaworks.algashop.ordering.infrastructure.persistence.entity.OrderPersistenceEntity;
 import com.algaworks.algashop.ordering.infrastructure.persistence.entity.OrderPersistenceEntityTestDataBuilder;
 import org.junit.jupiter.api.Test;

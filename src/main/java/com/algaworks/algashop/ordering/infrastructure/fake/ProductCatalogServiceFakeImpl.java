@@ -1,10 +1,10 @@
 package com.algaworks.algashop.ordering.infrastructure.fake;
 
-import com.algaworks.algashop.ordering.domain.service.ProductCatalogService;
-import com.algaworks.algashop.ordering.domain.valueobject.Money;
-import com.algaworks.algashop.ordering.domain.valueobject.Product;
-import com.algaworks.algashop.ordering.domain.valueobject.ProductName;
-import com.algaworks.algashop.ordering.domain.valueobject.id.ProductId;
+import com.algaworks.algashop.ordering.domain.product.ProductCatalogService;
+import com.algaworks.algashop.ordering.domain.commons.Money;
+import com.algaworks.algashop.ordering.domain.product.Product;
+import com.algaworks.algashop.ordering.domain.product.ProductName;
+import com.algaworks.algashop.ordering.domain.product.ProductId;
 
 import java.util.Optional;
 

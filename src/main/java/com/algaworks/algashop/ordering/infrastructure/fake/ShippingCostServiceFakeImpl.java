@@ -1,7 +1,7 @@
 package com.algaworks.algashop.ordering.infrastructure.fake;
 
-import com.algaworks.algashop.ordering.domain.service.ShippingCostService;
-import com.algaworks.algashop.ordering.domain.valueobject.Money;
+import com.algaworks.algashop.ordering.domain.order.shipping.ShippingCostService;
+import com.algaworks.algashop.ordering.domain.commons.Money;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 

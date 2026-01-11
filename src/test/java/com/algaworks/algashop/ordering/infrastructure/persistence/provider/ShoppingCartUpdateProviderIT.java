@@ -1,11 +1,15 @@
 package com.algaworks.algashop.ordering.infrastructure.persistence.provider;
 
 
-import com.algaworks.algashop.ordering.domain.entity.*;
-import com.algaworks.algashop.ordering.domain.valueobject.Money;
-import com.algaworks.algashop.ordering.domain.valueobject.Product;
-import com.algaworks.algashop.ordering.domain.valueobject.Quantity;
-import com.algaworks.algashop.ordering.domain.valueobject.id.ProductId;
+import com.algaworks.algashop.ordering.domain.customer.CustomerTestDataBuilder;
+import com.algaworks.algashop.ordering.domain.commons.Money;
+import com.algaworks.algashop.ordering.domain.product.Product;
+import com.algaworks.algashop.ordering.domain.commons.Quantity;
+import com.algaworks.algashop.ordering.domain.product.ProductId;
+import com.algaworks.algashop.ordering.domain.product.ProductTestDataBuilder;
+import com.algaworks.algashop.ordering.domain.shoppingcart.ShoppingCart;
+import com.algaworks.algashop.ordering.domain.shoppingcart.ShoppingCartItem;
+import com.algaworks.algashop.ordering.domain.shoppingcart.ShoppingCartTestDataBuilder;
 import com.algaworks.algashop.ordering.infrastructure.persistence.assembler.CustomerPersistenceEntityAssembler;
 import com.algaworks.algashop.ordering.infrastructure.persistence.assembler.ShoppingCartPersistenceEntityAssembler;
 import com.algaworks.algashop.ordering.infrastructure.persistence.config.SpringDataAuditingConfig;
