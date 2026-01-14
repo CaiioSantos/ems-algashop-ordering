@@ -1,19 +1,21 @@
 package com.algaworks.algashop.ordering.application.service.customer.management;
 
 
-import com.algaworks.algashop.ordering.application.commons.AddressData;
 import com.algaworks.algashop.ordering.application.customer.management.CustomerInput;
 import com.algaworks.algashop.ordering.application.customer.management.CustomerManagementApplicationService;
 import com.algaworks.algashop.ordering.application.customer.management.CustomerOutput;
+import com.algaworks.algashop.ordering.application.customer.management.CustomerUpdateInput;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.UUID;
 
 @SpringBootTest
+@Transactional
 class CustomerManagementApplicationServiceTest {
 
     @Autowired
@@ -22,29 +24,14 @@ class CustomerManagementApplicationServiceTest {
 
     @Test
     void shouldRegister() {
-        CustomerInput input = CustomerInput.builder()
-                .firstName("John")
-                .lastName("Doe")
-                .birthDate(LocalDate.of(1991, 7,5))
-                .document("255-08-0578")
-                .phone("478-256-2604")
-                .email("johndoe@email.com")
-                .promotionNotificationsAllowed(false)
-                .address(AddressData.builder()
-                        .street("Bourbon Street")
-                        .number("1200")
-                        .complement("Apt. 114")
-                        .neighborhood("North Ville")
-                        .city("Yostfort")
-                        .state("South California")
-                        .zipCode("12345")
-                        .build())
-                .build();
+        CustomerInput input = CustomerInputTestDataBuilder.aCostumer().build();
         UUID customerId = customerManagementApplicationService.create(input);
 
         Assertions.assertThat(customerId).isNotNull();
 
         CustomerOutput customerOutput = customerManagementApplicationService.findById(customerId);
+
+
 
         Assertions.assertThat(customerOutput.getId()).isEqualTo(customerId);
         Assertions.assertThat(customerOutput.getFirstName()).isEqualTo("John");
@@ -53,7 +40,25 @@ class CustomerManagementApplicationServiceTest {
         Assertions.assertThat(customerOutput.getBirthDate()).isEqualTo(LocalDate.of(1991, 7,5));
         Assertions.assertThat(customerOutput.getRegisteredAt()).isNotNull();
 
+    }
 
+    @Test
+    void shouldUpdate() {
+        CustomerInput input = CustomerInputTestDataBuilder.aCostumer().build();
+        UUID customerId = customerManagementApplicationService.create(input);
+
+        CustomerUpdateInput updateInput = CustomerUpdateInputTestDataBuilder.aCostumerUpdate().build();
+        Assertions.assertThat(customerId).isNotNull();
+
+        customerManagementApplicationService.update(customerId,updateInput);
+
+        CustomerOutput customerOutput = customerManagementApplicationService.findById(customerId);
+
+        Assertions.assertThat(customerOutput.getId()).isEqualTo(customerId);
+        Assertions.assertThat(customerOutput.getFirstName()).isEqualTo("Matt");
+        Assertions.assertThat(customerOutput.getLastName()).isEqualTo("Damon");
+        Assertions.assertThat(customerOutput.getEmail()).isEqualTo("johndoe@email.com");
+        Assertions.assertThat(customerOutput.getRegisteredAt()).isNotNull();
 
     }
 }

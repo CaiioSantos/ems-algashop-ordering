@@ -50,9 +50,41 @@ public class CustomerManagementApplicationService {
     public CustomerOutput findById(UUID customerId) {
         Objects.requireNonNull(customerId);
         Customer customer = customers.ofId(new CustomerId(customerId))
-                .orElseThrow(() -> new CustomerNotFoundException());
+                .orElseThrow(CustomerNotFoundException::new);
 
         return mapper.convert(customer, CustomerOutput.class);
+    }
+
+    @Transactional(readOnly = true)
+    public void update(UUID customerId, CustomerUpdateInput input) {
+        Objects.requireNonNull(customerId);
+        Objects.requireNonNull(input);
+
+        Customer customer = customers.ofId(new CustomerId(customerId))
+                .orElseThrow(CustomerNotFoundException::new);
+
+        customer.changeName(new FullName(input.getFirstName(), input.getLastName()));
+        customer.changePhone(new Phone(input.getPhone()));
+
+        if (input.getPromotionNotificationsAllowed().equals(Boolean.TRUE)){
+            customer.enablePromotionNotifications();
+        }else {
+            customer.disablePromotionNotifications();
+        }
+
+        AddressData address = input.getAddress();
+
+        customer.changeAdress(Address.builder()
+                        .zipCode(new ZipCode(address.getZipCode()))
+                        .state(address.getState())
+                        .city(address.getCity())
+                        .neighborhood(address.getNeighborhood())
+                        .street(address.getStreet())
+                        .number(address.getNumber())
+                        .complement(address.getComplement())
+                        .build());
+
+        customers.add(customer);
     }
 }
 

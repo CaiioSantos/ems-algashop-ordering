@@ -63,7 +63,7 @@ class CustomerTest {
                 .isThrownBy(() -> customer.changeEmail(new Email("email@teste.com")));
 
         Assertions.assertThatExceptionOfType(CustomerArchivedException.class)
-                .isThrownBy(() -> customer.changePhone("123-123-1111"));
+                .isThrownBy(() -> customer.changePhone(new Phone("123-123-1111")));
 
         Assertions.assertThatExceptionOfType(CustomerArchivedException.class)
                 .isThrownBy(() -> customer.enablePromotionNotifications());

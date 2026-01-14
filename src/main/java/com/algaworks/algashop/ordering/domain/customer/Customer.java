@@ -108,9 +108,9 @@ public class Customer implements AggregateRoot<CustomerId> {
         this.setEmail(email);
     }
 
-    public void changePhone(String phone) {
+    public void changePhone(Phone phone) {
         this.verifyIfChangeable();
-        this.setPhone(new Phone(phone));
+        this.setPhone(phone);
     }
 
     public void changeAdress(Address address) {

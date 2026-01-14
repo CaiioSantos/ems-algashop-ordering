@@ -9,7 +9,6 @@ import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.modelmapper.convention.NamingConventions;
-import org.modelmapper.spi.MappingContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -49,12 +48,7 @@ public class ModelMapperConfig {
     public Mapper mapper() {
         ModelMapper modelMapper = new ModelMapper();
         this.configuration(modelMapper);
-        return new Mapper() {
-            @Override
-            public <T> T convert(Object source, Class<T> destinationType) {
-                return modelMapper.map(source, destinationType);
-            }
-        };
+        return modelMapper::map;
     }
 
     private void configuration(ModelMapper modelMapper) {
