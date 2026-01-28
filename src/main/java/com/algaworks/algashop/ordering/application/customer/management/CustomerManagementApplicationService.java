@@ -4,10 +4,15 @@ import com.algaworks.algashop.ordering.application.commons.AddressData;
 import com.algaworks.algashop.ordering.application.utility.Mapper;
 import com.algaworks.algashop.ordering.domain.commons.*;
 import com.algaworks.algashop.ordering.domain.customer.*;
+import com.algaworks.algashop.ordering.domain.order.Order;
+import com.algaworks.algashop.ordering.domain.order.OrderId;
+import com.algaworks.algashop.ordering.domain.order.OrderNotFoundException;
+import com.algaworks.algashop.ordering.domain.order.Orders;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -86,5 +91,36 @@ public class CustomerManagementApplicationService {
 
         customers.add(customer);
     }
+
+    @Transactional
+    public void archive(UUID customerId) {
+        Objects.requireNonNull(customerId);
+
+        Customer customer = customers.ofId(new CustomerId(customerId))
+                .orElseThrow(CustomerNotFoundException::new);
+
+        if (Boolean.TRUE.equals(customer.isArchived()) && customer.archivedAt() != null) {
+            throw new CustomerArchivedException();
+        }
+
+        customer.archive();
+        customers.add(customer);
+
+
+    }
+
+    @Transactional
+    public void changeEmail(UUID customerId, String newEmail) {
+        Objects.requireNonNull(customerId);
+
+        Customer customer = customers.ofId(new CustomerId(customerId))
+                .orElseThrow(CustomerNotFoundException::new);
+
+        customerRegistrationService.changeEmail(customer, new Email(newEmail));
+        customers.add(customer);
+
+
+    }
+
 }
 

@@ -2,11 +2,12 @@ package com.algaworks.algashop.ordering.domain.shoppingcart;
 
 import com.algaworks.algashop.ordering.domain.commons.Quantity;
 import com.algaworks.algashop.ordering.domain.customer.CustomerId;
+import com.algaworks.algashop.ordering.domain.customer.CustomerTestDataBuilder;
 import com.algaworks.algashop.ordering.domain.product.ProductTestDataBuilder;
 
 public class ShoppingCartTestDataBuilder {
 
-    public CustomerId customerId = new CustomerId();
+    public CustomerId customerId = CustomerTestDataBuilder.DEFAULT_CUSTOMER_ID;
     public static final ShoppingCartId DEFAULT_SHOPPING_CART_ID = new ShoppingCartId();
     private boolean withItems = true;
 
