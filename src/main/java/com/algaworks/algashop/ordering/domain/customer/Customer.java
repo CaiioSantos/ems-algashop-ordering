@@ -1,5 +1,6 @@
 package com.algaworks.algashop.ordering.domain.customer;
 
+import com.algaworks.algashop.ordering.domain.AbstractEventSourceEntity;
 import com.algaworks.algashop.ordering.domain.AggregateRoot;
 import com.algaworks.algashop.ordering.domain.commons.*;
 import lombok.Builder;
@@ -10,7 +11,9 @@ import java.util.UUID;
 
 import static com.algaworks.algashop.ordering.domain.ErrorMessages.*;
 
-public class Customer implements AggregateRoot<CustomerId> {
+public class Customer
+        extends AbstractEventSourceEntity
+        implements AggregateRoot<CustomerId> {
 
     private CustomerId id;
     private FullName fullName;
@@ -31,7 +34,7 @@ public class Customer implements AggregateRoot<CustomerId> {
     private static  Customer createBrandNew(FullName fullName, BirthDate birthDate, Email email,
                                      Phone phone, Document document, Boolean promotionNotificationsAllowed,
                                      Address address){
-        return new Customer(
+        Customer customer = new Customer(
                 new CustomerId(),
                 null,
                 fullName,
@@ -45,6 +48,9 @@ public class Customer implements AggregateRoot<CustomerId> {
                 null,
                 LoyaltyPoints.ZERO,
                 address);
+        customer.publishDomainEvent(new CustomerRegisteredEvent(customer.id(),
+                customer.registeredAt(), customer.fullName(), customer.email()));
+        return customer;
     }
 
     @Builder(builderClassName = "ExistingCustomerBuild", builderMethodName = "existing")
@@ -85,6 +91,8 @@ public class Customer implements AggregateRoot<CustomerId> {
         this.setBirthDate(null);
         this.setPromotionNotificationsAllowed(false);
         this.setAddress(this.address().toBuilder().number("Anonymized").complement(null).build());
+
+        this.publishDomainEvent(new CustomerArchivedEvent(this.id(), this.archivedAt()));
 
     }
 

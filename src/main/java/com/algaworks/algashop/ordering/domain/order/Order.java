@@ -1,5 +1,6 @@
 package com.algaworks.algashop.ordering.domain.order;
 
+import com.algaworks.algashop.ordering.domain.AbstractEventSourceEntity;
 import com.algaworks.algashop.ordering.domain.AggregateRoot;
 import com.algaworks.algashop.ordering.domain.commons.Money;
 import com.algaworks.algashop.ordering.domain.commons.Quantity;
@@ -12,7 +13,9 @@ import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.*;
 
-public class Order implements AggregateRoot<OrderId> {
+public class Order
+        extends AbstractEventSourceEntity
+        implements AggregateRoot<OrderId> {
 
     private OrderId id;
     private CustomerId customerId;
