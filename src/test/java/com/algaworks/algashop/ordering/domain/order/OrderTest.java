@@ -106,6 +106,7 @@ class OrderTest {
         order.markAsPaid();
         Assertions.assertThat(order.isPaid()).isTrue();
         Assertions.assertThat(order.paidAt()).isNotNull();
+
     }
 
 

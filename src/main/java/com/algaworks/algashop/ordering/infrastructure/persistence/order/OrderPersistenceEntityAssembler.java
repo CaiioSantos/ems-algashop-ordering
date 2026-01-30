@@ -37,7 +37,7 @@ public class OrderPersistenceEntityAssembler {
         orderPersistenceEntity.setCanceledAt(order.canceledAt());
         orderPersistenceEntity.setReadyAt(order.readyAt());
         orderPersistenceEntity.setVersion(order.version());
-
+        orderPersistenceEntity.addEvents(order.domainEvents());
         Set<OrderItemPersistenceEntity> mergeItens =  this.mergeItens(order, orderPersistenceEntity);
         orderPersistenceEntity.replaceItems(mergeItens);
 
