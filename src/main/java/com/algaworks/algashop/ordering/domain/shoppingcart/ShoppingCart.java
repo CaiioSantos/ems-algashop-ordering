@@ -41,18 +41,24 @@ public class ShoppingCart
         this.setItems(items);
     }
     public static ShoppingCart startShopping(CustomerId customerId){
-        return new ShoppingCart(new ShoppingCartId(),null , customerId, Money.ZERO, Quantity.ZERO, OffsetDateTime.now(), new HashSet<>());
+        ShoppingCart shoppingCart = new ShoppingCart(new ShoppingCartId(), null, customerId, Money.ZERO, Quantity.ZERO, OffsetDateTime.now(), new HashSet<>());
+        shoppingCart.publishDomainEvent(new ShoppingCartCreatedEvent(shoppingCart.id(),
+                shoppingCart.customerId(),
+                shoppingCart.createAt()));
+        return shoppingCart;
     }
 
     public void empty(){
         totalAmount = Money.ZERO;
         totalItens = Quantity.ZERO;
         items.clear();
+        this.publishDomainEvent(new ShoppingCartEmptiedEvent(this.id(),this.customerId(),OffsetDateTime.now()));
     }
     public void removeItem(ShoppingCartItemId cartItemId){
         ShoppingCartItem shoppingCartItem = this.findItem(cartItemId);
         this.items.remove(shoppingCartItem);
         this.recalculateTotals();
+        this.publishDomainEvent(new ShoppingCartItemRemovedEvent(this.id(),this.customerId(),shoppingCartItem.productId(),OffsetDateTime.now()));
     }
     public void addItem(Product product, Quantity quantity){
         Objects.requireNonNull(product);
@@ -71,7 +77,7 @@ public class ShoppingCart
         this.searchItemByProduct(product.id())
                 .ifPresentOrElse(i -> updateItem(i, product, quantity), () -> insertItem(shoppingCartItem));
 
-
+        this.publishDomainEvent(new ShoppingCartItemAddedEvent(this.id(),this.customerId(),product.id(),OffsetDateTime.now()));
         this.recalculateTotals();
     }
     public void refreshItem(Product product) {

@@ -6,13 +6,19 @@ import com.algaworks.algashop.ordering.domain.commons.Money;
 import com.algaworks.algashop.ordering.domain.product.Product;
 import com.algaworks.algashop.ordering.domain.commons.Quantity;
 import com.algaworks.algashop.ordering.domain.customer.CustomerId;
+import com.algaworks.algashop.ordering.infrastructure.listener.shoppingcart.ShoppingCartEventListener;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 
 import java.math.BigDecimal;
 import java.util.Set;
 
 class ShoppingCartTest {
+
+    @MockitoSpyBean
+    private ShoppingCartEventListener shoppingCartEventListener;
 
     @Test
     void givenCustomer_whenStartShopping_shouldInitializeEmptyCart() {
@@ -71,6 +77,9 @@ class ShoppingCartTest {
         Assertions.assertThat(cart.totalItens()).isEqualTo(
                 new Quantity(cart.items().stream().mapToInt(i -> i.quantity().value()).sum())
         );
+
+        Mockito.verify(shoppingCartEventListener, Mockito.times(1))
+                .listen(Mockito.any(ShoppingCartCreatedEvent.class));
     }
 
     @Test

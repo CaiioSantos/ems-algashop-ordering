@@ -119,7 +119,7 @@ public class Order
     public void markAsReady() {
         this.changeStatus(OrderStatus.READY);
         this.setReadyAt(OffsetDateTime.now());
-        this.publishDomainEvent(new OrderReadyEvent(this.id(), this.readyAt()));
+        this.publishDomainEvent(new OrderReadyEvent(this.customerId(), this.id(), this.readyAt()));
     }
 
     public void cancel(){
