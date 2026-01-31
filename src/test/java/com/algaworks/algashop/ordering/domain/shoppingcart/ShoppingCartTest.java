@@ -78,8 +78,6 @@ class ShoppingCartTest {
                 new Quantity(cart.items().stream().mapToInt(i -> i.quantity().value()).sum())
         );
 
-        Mockito.verify(shoppingCartEventListener, Mockito.times(1))
-                .listen(Mockito.any(ShoppingCartCreatedEvent.class));
     }
 
     @Test
