@@ -5,10 +5,12 @@ import com.algaworks.algashop.ordering.domain.commons.Quantity;
 import com.algaworks.algashop.ordering.domain.customer.Customer;
 import com.algaworks.algashop.ordering.domain.customer.CustomerTestDataBuilder;
 import com.algaworks.algashop.ordering.domain.customer.LoyaltyPoints;
+import com.algaworks.algashop.ordering.domain.product.ProductOutOfStockException;
 import com.algaworks.algashop.ordering.domain.product.ProductTestDataBuilder;
 import com.algaworks.algashop.ordering.domain.product.Product;
 import com.algaworks.algashop.ordering.domain.customer.CustomerId;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -26,6 +28,17 @@ public class BuyNowServiceTest {
 
     @Mock
     private Orders orders;
+
+    @BeforeEach
+    void setup() {
+        CustomerHaveFreeShippingSpecification specification = new CustomerHaveFreeShippingSpecification(
+                orders,
+                new LoyaltyPoints(100),
+                2L,
+                new LoyaltyPoints(2000)
+        );
+        buyNowService = new BuyNowService(specification);
+    }
 
     @Test
     void givenValidProductAndDetails_whenBuyNow_shouldReturnPlacedOrder() {
@@ -88,5 +101,17 @@ public class BuyNowServiceTest {
         Money expectedTotalAmount = product.price().multiply(quantity);
         Assertions.assertThat(order.totalAmount()).isEqualTo(expectedTotalAmount);
         Assertions.assertThat(order.totalItens()).isEqualTo(quantity);
+    }
+    @Test
+    void givenOutOfStockProduct_whenBuyNow_shouldThrowProductOutOfStockException() {
+        Product product = ProductTestDataBuilder.aProductUnavailable().build();
+        Customer customer = CustomerTestDataBuilder.existingCustomer().build();
+        Billing billingInfo = OrderTestDataBuilder.aBilling();
+        Shipping shippingInfo = OrderTestDataBuilder.aShipping();
+        Quantity quantity = new Quantity(1);
+        PaymentMethod paymentMethod = PaymentMethod.CREDIT_CARD;
+
+        Assertions.assertThatExceptionOfType(ProductOutOfStockException.class)
+                .isThrownBy(() -> buyNowService.buyNow(product, customer, billingInfo, shippingInfo, quantity, paymentMethod));
     }
 }
