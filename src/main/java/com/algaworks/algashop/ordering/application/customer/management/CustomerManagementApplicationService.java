@@ -1,6 +1,7 @@
 package com.algaworks.algashop.ordering.application.customer.management;
 
 import com.algaworks.algashop.ordering.application.commons.AddressData;
+import com.algaworks.algashop.ordering.application.customer.query.CustomerOutput;
 import com.algaworks.algashop.ordering.application.utility.Mapper;
 import com.algaworks.algashop.ordering.domain.commons.*;
 import com.algaworks.algashop.ordering.domain.customer.*;
@@ -22,7 +23,6 @@ public class CustomerManagementApplicationService {
 
     private final CustomerRegistrationService customerRegistrationService;
     private final Customers customers;
-
     private final Mapper mapper;
 
     @Transactional
@@ -49,15 +49,6 @@ public class CustomerManagementApplicationService {
         );
         customers.add(customer);
         return customer.id().value();
-    }
-
-    @Transactional(readOnly = true)
-    public CustomerOutput findById(UUID customerId) {
-        Objects.requireNonNull(customerId);
-        Customer customer = customers.ofId(new CustomerId(customerId))
-                .orElseThrow(CustomerNotFoundException::new);
-
-        return mapper.convert(customer, CustomerOutput.class);
     }
 
     @Transactional(readOnly = true)
@@ -107,6 +98,15 @@ public class CustomerManagementApplicationService {
         customers.add(customer);
 
 
+    }
+
+    @Transactional(readOnly = true)
+    public CustomerOutput findById(UUID customerId) {
+        Objects.requireNonNull(customerId);
+        Customer customer = customers.ofId(new CustomerId(customerId))
+                .orElseThrow(CustomerNotFoundException::new);
+
+        return mapper.convert(customer, CustomerOutput.class);
     }
 
     @Transactional

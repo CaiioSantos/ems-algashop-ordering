@@ -1,11 +1,10 @@
 package com.algaworks.algashop.ordering.application.service.customer.management;
 
 
-import com.algaworks.algashop.ordering.application.customer.management.CustomerInput;
-import com.algaworks.algashop.ordering.application.customer.management.CustomerManagementApplicationService;
-import com.algaworks.algashop.ordering.application.customer.management.CustomerOutput;
-import com.algaworks.algashop.ordering.application.customer.management.CustomerUpdateInput;
+import com.algaworks.algashop.ordering.application.customer.management.*;
 import com.algaworks.algashop.ordering.application.customer.notification.CustomerNotificationService;
+import com.algaworks.algashop.ordering.application.customer.query.CustomerOutput;
+import com.algaworks.algashop.ordering.application.customer.query.CustomerQueryService;
 import com.algaworks.algashop.ordering.domain.customer.CustomerArchivedEvent;
 import com.algaworks.algashop.ordering.domain.customer.CustomerArchivedException;
 import com.algaworks.algashop.ordering.domain.customer.CustomerNotFoundException;
@@ -13,7 +12,6 @@ import com.algaworks.algashop.ordering.domain.customer.CustomerRegisteredEvent;
 import com.algaworks.algashop.ordering.infrastructure.listener.customer.CustomerEventListener;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -36,6 +34,9 @@ class CustomerManagementApplicationServiceIT {
     @MockitoSpyBean
     private CustomerNotificationService customerNotificationService;
 
+    @Autowired
+    private CustomerQueryService customerQueryService;
+
 
     @Test
     void shouldRegister() {
@@ -44,7 +45,7 @@ class CustomerManagementApplicationServiceIT {
 
         Assertions.assertThat(customerId).isNotNull();
 
-        CustomerOutput customerOutput = customerManagementApplicationService.findById(customerId);
+        CustomerOutput customerOutput = customerQueryService.findById(customerId);
 
 
 
@@ -74,7 +75,7 @@ class CustomerManagementApplicationServiceIT {
 
         customerManagementApplicationService.update(customerId,updateInput);
 
-        CustomerOutput customerOutput = customerManagementApplicationService.findById(customerId);
+        CustomerOutput customerOutput = customerQueryService.findById(customerId);
 
         Assertions.assertThat(customerOutput.getId()).isEqualTo(customerId);
         Assertions.assertThat(customerOutput.getFirstName()).isEqualTo("Matt");
@@ -148,7 +149,7 @@ class CustomerManagementApplicationServiceIT {
 
         customerManagementApplicationService.changeEmail(customerId,"teste@Email.com");
 
-        CustomerOutput customerOutput = customerManagementApplicationService.findById(customerId);
+        CustomerOutput customerOutput = customerQueryService.findById(customerId);
 
         Assertions.assertThat(customerOutput.getId()).isEqualTo(customerId);
         Assertions.assertThat(customerOutput.getEmail()).isEqualTo("teste@Email.com");
