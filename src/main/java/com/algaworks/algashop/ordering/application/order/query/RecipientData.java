@@ -1,6 +1,5 @@
-package com.algaworks.algashop.ordering.application.checkout;
+package com.algaworks.algashop.ordering.application.order.query;
 
-import com.algaworks.algashop.ordering.application.commons.AddressData;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,12 +9,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class BillingData {
-
+public class RecipientData {
     private String firstName;
     private String lastName;
-    private String email;
-    private String document;
     private String phone;
-    private AddressData address;
+    private String document;
 }
