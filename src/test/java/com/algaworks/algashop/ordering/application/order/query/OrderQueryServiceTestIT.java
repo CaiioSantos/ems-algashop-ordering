@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
@@ -90,4 +91,77 @@ class OrderQueryServiceTestIT {
         Assertions.assertThat(page.getNumberOfElements()).isEqualTo(2);
     }
 
+    @Test
+    public void shouldFilterByMultipleParams() {
+        Customer customer = CustomerTestDataBuilder.existingCustomer().build();
+        customers.add(customer);
+
+        orders.add(OrderTestDataBuilder.anOrder().status(OrderStatus.DRAFT).withItems(false).customerId(customer.id()).build());
+        Order order1 = OrderTestDataBuilder.anOrder().status(OrderStatus.PLACED).customerId(customer.id()).build();
+        orders.add(order1);
+
+        Customer customer2 = CustomerTestDataBuilder.existingCustomer().id(new CustomerId()).build();
+        customers.add(customer2);
+        orders.add(OrderTestDataBuilder.anOrder().status(OrderStatus.PAID).customerId(customer2.id()).build());
+        orders.add(OrderTestDataBuilder.anOrder().status(OrderStatus.READY).customerId(customer2.id()).build());
+        orders.add(OrderTestDataBuilder.anOrder().status(OrderStatus.CANCELED).customerId(customer2.id()).build());
+
+        OrderFilter filter = new OrderFilter();
+        filter.setCustomerId(customer.id().value());
+        filter.setStatus(OrderStatus.PLACED.toString().toLowerCase());
+        filter.setTotalAmountFrom(order1.totalAmount().value());
+
+        Page<OrderSummaryOutput> page = orderQueryService.filter(filter);
+
+        Assertions.assertThat(page.getTotalPages()).isEqualTo(1);
+        Assertions.assertThat(page.getTotalElements()).isEqualTo(1);
+        Assertions.assertThat(page.getNumberOfElements()).isEqualTo(1);
+    }
+
+    @Test
+    public void givenInvalidOrderId_whenFilter_shouldReturnEmptyPage() {
+        Customer customer = CustomerTestDataBuilder.existingCustomer().build();
+        customers.add(customer);
+
+        orders.add(OrderTestDataBuilder.anOrder().status(OrderStatus.DRAFT).withItems(false).customerId(customer.id()).build());
+        Order order1 = OrderTestDataBuilder.anOrder().status(OrderStatus.PLACED).customerId(customer.id()).build();
+        orders.add(order1);
+
+        Customer customer2 = CustomerTestDataBuilder.existingCustomer().id(new CustomerId()).build();
+        customers.add(customer2);
+        orders.add(OrderTestDataBuilder.anOrder().status(OrderStatus.PAID).customerId(customer2.id()).build());
+        orders.add(OrderTestDataBuilder.anOrder().status(OrderStatus.READY).customerId(customer2.id()).build());
+        orders.add(OrderTestDataBuilder.anOrder().status(OrderStatus.CANCELED).customerId(customer2.id()).build());
+
+        OrderFilter filter = new OrderFilter();
+        filter.setOrderId("PPP");
+
+        Page<OrderSummaryOutput> page = orderQueryService.filter(filter);
+
+        Assertions.assertThat(page.getTotalPages()).isEqualTo(0);
+        Assertions.assertThat(page.getTotalElements()).isEqualTo(0);
+        Assertions.assertThat(page.getNumberOfElements()).isEqualTo(0);
+    }
+    @Test
+    public void shouldOrderByStatus() {
+        Customer customer = CustomerTestDataBuilder.existingCustomer().build();
+        customers.add(customer);
+
+        orders.add(OrderTestDataBuilder.anOrder().status(OrderStatus.DRAFT).withItems(false).customerId(customer.id()).build());
+        orders.add(OrderTestDataBuilder.anOrder().status(OrderStatus.PLACED).customerId(customer.id()).build());
+
+        Customer customer2 = CustomerTestDataBuilder.existingCustomer().id(new CustomerId()).build();
+        customers.add(customer2);
+        orders.add(OrderTestDataBuilder.anOrder().status(OrderStatus.PAID).customerId(customer2.id()).build());
+        orders.add(OrderTestDataBuilder.anOrder().status(OrderStatus.READY).customerId(customer2.id()).build());
+        orders.add(OrderTestDataBuilder.anOrder().status(OrderStatus.CANCELED).customerId(customer2.id()).build());
+
+        OrderFilter filter = new OrderFilter();
+        filter.setSortByProperty(OrderFilter.SortType.STATUS);
+        filter.setSortDirection(Sort.Direction.ASC);
+
+        Page<OrderSummaryOutput> page = orderQueryService.filter(filter);
+
+        Assertions.assertThat(page.getContent().getFirst().getStatus()).isEqualTo(OrderStatus.CANCELED.toString());
+    }
 }

@@ -14,6 +14,8 @@ import java.util.UUID;
 @NoArgsConstructor
 public class OrderFilter extends SortablePageFilter<OrderFilter.SortType> {
 
+    private String status;
+    private String orderId;
     private UUID customerId;
     private OffsetDateTime placedAtFrom;
     private OffsetDateTime placedAtTo;

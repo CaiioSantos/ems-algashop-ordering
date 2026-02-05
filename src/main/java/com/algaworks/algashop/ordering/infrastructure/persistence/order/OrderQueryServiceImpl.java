@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -70,14 +71,6 @@ public class OrderQueryServiceImpl implements OrderQueryService {
         criteriaQuery.select(
                 builder.construct(OrderSummaryOutput.class,
                         root.get("id"),
-                        builder.construct(CustomerMinimalOutput.class,
-                                customer.get("id"),
-                                customer.get("firstName"),
-                                customer.get("lastName"),
-                                customer.get("email"),
-                                customer.get("document"),
-                                customer.get("phone")
-                        ),
                         root.get("totaItems"),
                         root.get("totalAmount"),
                         root.get("placedAt"),
@@ -85,13 +78,26 @@ public class OrderQueryServiceImpl implements OrderQueryService {
                         root.get("canceledAt"),
                         root.get("readyAt"),
                         root.get("status"),
-                        root.get("paymentMethod")
+                        root.get("paymentMethod"),
+                        builder.construct(CustomerMinimalOutput.class,
+                                customer.get("id"),
+                                customer.get("firstName"),
+                                customer.get("lastName"),
+                                customer.get("email"),
+                                customer.get("document"),
+                                customer.get("phone")
+                        )
                         )
         );
 
         Predicate[] predicates = toPredicates(builder, root, pageFilter);
+        Order sortOrder = this.toSortorder(builder,root,pageFilter);
+
         criteriaQuery.where(predicates);
 
+        if (sortOrder != null) {
+            criteriaQuery.orderBy(sortOrder);
+        }
         TypedQuery<OrderSummaryOutput> typedQuery = entityManager.createQuery(criteriaQuery);
         typedQuery.setFirstResult(pageFilter.getPage() * pageFilter.getSize());
         typedQuery.setMaxResults(pageFilter.getSize());
@@ -101,12 +107,58 @@ public class OrderQueryServiceImpl implements OrderQueryService {
         return new PageImpl<>(typedQuery.getResultList(),pageRequest,totalQueryResult);
     }
 
+    private Order toSortorder(CriteriaBuilder builder, Root<OrderPersistenceEntity> root, OrderFilter pageFilter) {
+        if (pageFilter.getSortDirectionOrDefault() == Sort.Direction.ASC){
+            return builder.asc(root.get(pageFilter.getSortByPropertyOrDefault().getPropertyName()));
+        }
+        if (pageFilter.getSortDirectionOrDefault() == Sort.Direction.DESC){
+            return builder.asc(root.get(pageFilter.getSortByPropertyOrDefault().getPropertyName()));
+        }
+        return null;
+    }
+
     private Predicate[] toPredicates(CriteriaBuilder builder, Root<OrderPersistenceEntity> root, OrderFilter filter) {
 
         List<Predicate> predicates = new ArrayList<>();
 
         if (filter.getCustomerId() != null) {
             predicates.add(builder.equal(root.get("customer").get("id"), filter.getCustomerId()));
+        }
+
+        if (filter.getStatus() != null && !filter.getStatus().isBlank()) {
+            predicates.add(builder.equal(root.get("status"), filter.getStatus().toUpperCase()));
+        }
+
+        if (filter.getOrderId() != null) {
+            long orderIdLongValue;
+
+            try {
+                OrderId orderId = new OrderId(filter.getOrderId());
+                orderIdLongValue = orderId.value().toLong();
+            } catch (Exception e) {
+                orderIdLongValue = 0L;
+            }
+            predicates.add(builder.equal(root.get("id"), orderIdLongValue));
+
+
+        }
+
+        if (filter.getPlacedAtFrom() != null) {
+            predicates.add(builder.greaterThanOrEqualTo(root.get("placedAt"), filter.getPlacedAtFrom()));
+
+        }
+        if (filter.getPlacedAtTo() != null) {
+            predicates.add(builder.lessThanOrEqualTo(root.get("placedAt"), filter.getPlacedAtTo()));
+
+        }
+
+        if (filter.getTotalAmountFrom() != null) {
+            predicates.add(builder.greaterThanOrEqualTo(root.get("totalAmount"), filter.getTotalAmountFrom()));
+
+        }
+        if (filter.getTotalAmountTo() != null) {
+            predicates.add(builder.lessThanOrEqualTo(root.get("totalAmount"), filter.getTotalAmountTo()));
+
         }
 
         return predicates.toArray(new Predicate[]{});
