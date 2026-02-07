@@ -112,7 +112,7 @@ public class OrderQueryServiceImpl implements OrderQueryService {
             return builder.asc(root.get(pageFilter.getSortByPropertyOrDefault().getPropertyName()));
         }
         if (pageFilter.getSortDirectionOrDefault() == Sort.Direction.DESC){
-            return builder.asc(root.get(pageFilter.getSortByPropertyOrDefault().getPropertyName()));
+            return builder.desc(root.get(pageFilter.getSortByPropertyOrDefault().getPropertyName()));
         }
         return null;
     }
