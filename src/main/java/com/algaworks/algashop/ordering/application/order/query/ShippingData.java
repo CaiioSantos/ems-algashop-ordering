@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
@@ -16,8 +17,8 @@ import java.time.LocalDateTime;
 public class ShippingData {
 
     private BigDecimal cost;
-    private LocalDateTime expectedDate;
-    private RecipientData recipientData;
-    private AddressData addressData;
+    private LocalDate expectedDate;
+    private RecipientData recipient;
+    private AddressData address;
 
 }
