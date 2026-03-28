@@ -17,7 +17,7 @@ public class OrderSummaryOutput {
 
     private String id;
     private CustomerMinimalOutput customer;
-    private Integer totaItems;
+    private Integer totalItems;
     private BigDecimal totalAmount;
     private OffsetDateTime placedAt;
     private OffsetDateTime paidAt;
@@ -31,7 +31,7 @@ public class OrderSummaryOutput {
                               OffsetDateTime readyAt, String status, String paymentMethod, CustomerMinimalOutput customer) {
         this.id = new OrderId(id).toString();
         this.customer = customer;
-        this.totaItems = totalItems;
+        this.totalItems = totalItems;
         this.totalAmount = totalAmount;
         this.placedAt = placedAt;
         this.paidAt = paidAt;
