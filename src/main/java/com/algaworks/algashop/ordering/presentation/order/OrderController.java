@@ -55,7 +55,7 @@ public class OrderController {
         String orderId;
         try {
             orderId = checkoutApplicationService.checkout(input);
-        }catch (CustomerNotFoundException | ShoppingCartNotFoundException e){
+        } catch (CustomerNotFoundException | ShoppingCartNotFoundException e) {
             throw new UnprocessableEntityException(e.getMessage(), e);
         }
         return orderQueryService.findById(orderId);

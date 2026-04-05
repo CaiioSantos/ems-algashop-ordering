@@ -8,10 +8,6 @@ import java.util.Optional;
 
 public interface ShoppingCarts extends RemoveCapableRepository<ShoppingCart, ShoppingCartId> {
 
-//    @Query("""
-//            from ShoppingCart
-//            where customerId = :customerId
-//            """)
-    Optional<ShoppingCart> ofCustomer(@Param("customerId") CustomerId customerId);
+    Optional<ShoppingCart> ofCustomer(CustomerId customerId);
 
 }

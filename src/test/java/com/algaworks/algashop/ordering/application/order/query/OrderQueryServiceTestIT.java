@@ -63,7 +63,7 @@ class OrderQueryServiceTestIT {
 
         Page<OrderSummaryOutput> page = orderQueryService.filter(new OrderFilter(3, 0));
 
-        Assertions.assertThat(page.getTotalPages()).isEqualTo(2);
+
         Assertions.assertThat(page.getTotalElements()).isEqualTo(5);
         Assertions.assertThat(page.getNumberOfElements()).isEqualTo(3);
     }

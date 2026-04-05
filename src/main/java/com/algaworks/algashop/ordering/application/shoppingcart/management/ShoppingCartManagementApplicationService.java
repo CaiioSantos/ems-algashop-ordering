@@ -22,6 +22,7 @@ public class ShoppingCartManagementApplicationService {
     private final ShoppingService shoppingService;
     private final ProductCatalogService productCatalogService;
 
+
     @Transactional
     public UUID create(UUID customerId) {
         Objects.requireNonNull(customerId);
@@ -32,11 +33,14 @@ public class ShoppingCartManagementApplicationService {
     @Transactional
     public void addItem(ShoppingCartItemInput input) {
         Objects.requireNonNull(input);
+        ShoppingCartId shoppingCartId = new ShoppingCartId(input.getShoppingCartId());
+        ProductId productId = new ProductId(input.getProductId());
 
-        ShoppingCart shoppingCart = shoppingCarts.ofId(new ShoppingCartId(input.getShoppingCartId()))
-                .orElseThrow(() -> new ShoppingCartNotFoundException());
-        Product product = productCatalogService.ofId(new ProductId(input.getProductId()))
-                .orElseThrow(() -> new ProductNotFoundException());
+        ShoppingCart shoppingCart = shoppingCarts.ofId(shoppingCartId)
+                .orElseThrow(()-> new ShoppingCartNotFoundException());
+
+        Product product = productCatalogService.ofId(productId)
+                .orElseThrow(()-> new ProductNotFoundException(productId));
 
         shoppingCart.addItem(product,new Quantity(input.getQuantity()));
         shoppingCarts.add(shoppingCart);
