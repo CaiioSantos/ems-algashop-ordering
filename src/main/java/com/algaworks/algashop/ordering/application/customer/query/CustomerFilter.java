@@ -6,7 +6,7 @@ import lombok.*;
 import org.springframework.data.domain.Sort;
 
 @Data
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = false)
 @AllArgsConstructor
 @NoArgsConstructor
 public class CustomerFilter extends SortablePageFilter<CustomerFilter.SortType> {

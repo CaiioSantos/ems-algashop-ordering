@@ -36,7 +36,7 @@ public class OrderPersistenceEntity
     private CustomerPersistenceEntity customer;
 
     private BigDecimal totalAmount;
-    private Integer totaItems;
+    private Integer totalItems;
     private String status;
     private String paymentMethod;
 
@@ -89,7 +89,7 @@ public class OrderPersistenceEntity
     })
     private ShippingEmbeddable shipping;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<OrderItemPersistenceEntity> items = new HashSet<>();
 
     @Builder
@@ -97,7 +97,7 @@ public class OrderPersistenceEntity
         this.id = id;
         this.customer = customer;
         this.totalAmount = totalAmount;
-        this.totaItems = totaItems;
+        this.totalItems = totaItems;
         this.status = status;
         this.paymentMethod = paymentMethod;
         this.placedAt = placedAt;

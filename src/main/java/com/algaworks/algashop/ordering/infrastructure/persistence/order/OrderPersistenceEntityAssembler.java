@@ -29,7 +29,7 @@ public class OrderPersistenceEntityAssembler {
     public OrderPersistenceEntity merge(OrderPersistenceEntity orderPersistenceEntity, Order order) {
         orderPersistenceEntity.setId(order.id().value().toLong());
         orderPersistenceEntity.setTotalAmount(order.totalAmount().value());
-        orderPersistenceEntity.setTotaItems(order.totalItens().value());
+        orderPersistenceEntity.setTotalItems(order.totalItens().value());
         orderPersistenceEntity.setStatus(order.status().name());
         orderPersistenceEntity.setPaymentMethod(order.paymentMethod().name());
         orderPersistenceEntity.setPlacedAt(order.placedAt());

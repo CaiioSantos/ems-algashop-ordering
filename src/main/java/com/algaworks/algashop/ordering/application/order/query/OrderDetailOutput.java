@@ -28,5 +28,5 @@ public class OrderDetailOutput {
     private ShippingData shipping;
     private BillingData billing;
 
-    private List<OrderItemDetailOutput> items = new ArrayList<>();
+    private List<OrderItemDetailOutput> items;
 }

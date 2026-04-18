@@ -3,7 +3,6 @@ package com.algaworks.algashop.ordering.application.customer.query;
 import com.algaworks.algashop.ordering.domain.commons.Email;
 import com.algaworks.algashop.ordering.domain.commons.FullName;
 import com.algaworks.algashop.ordering.domain.customer.Customer;
-
 import com.algaworks.algashop.ordering.domain.customer.CustomerId;
 import com.algaworks.algashop.ordering.domain.customer.CustomerTestDataBuilder;
 import com.algaworks.algashop.ordering.domain.customer.Customers;
@@ -13,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest

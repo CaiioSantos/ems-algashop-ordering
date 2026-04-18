@@ -22,7 +22,7 @@ public class OrderPersistenceEntityDisassembler {
                 .id(new OrderId(persistenceEntity.getId()))
                 .customerId(new CustomerId(persistenceEntity.getCustomerId()))
                 .totalAmount(new Money(persistenceEntity.getTotalAmount()))
-                .totalItems(new Quantity(persistenceEntity.getTotaItems()))
+                .totalItems(new Quantity(persistenceEntity.getTotalItems()))
                 .status(OrderStatus.valueOf(persistenceEntity.getStatus()))
                 .paymentMethod(PaymentMethod.valueOf(persistenceEntity.getPaymentMethod()))
                 .placedAt(persistenceEntity.getPlacedAt())

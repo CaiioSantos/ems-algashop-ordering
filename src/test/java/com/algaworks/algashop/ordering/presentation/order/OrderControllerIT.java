@@ -75,7 +75,7 @@ public class OrderControllerIT {
                 .extensions(new ResponseTemplateTransformer(true)));
 
         wireMockProductCatalog = new WireMockServer(options()
-                .port(8781)
+                .port(8782)
                 .usingFilesUnderDirectory("src/test/resources/wiremock/product-catalog")
                 .extensions(new ResponseTemplateTransformer(true)));
         wireMockRapidex.start();

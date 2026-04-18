@@ -21,7 +21,7 @@ public class Order
     private CustomerId customerId;
 
     private Money totalAmount;
-    private Quantity totalItens;
+    private Quantity totalItems;
 
     private OffsetDateTime placedAt;
     private OffsetDateTime paidAt;
@@ -196,7 +196,7 @@ public class Order
     }
 
     public Quantity totalItens() {
-        return totalItens;
+        return totalItems;
     }
 
     public OffsetDateTime placedAt() {
@@ -328,7 +328,7 @@ public class Order
 
     private void setTotalItens(Quantity totalItens) {
         Objects.requireNonNull(totalItens);
-        this.totalItens = totalItens;
+        this.totalItems = totalItens;
     }
 
     private void setPlacedAt(OffsetDateTime placedAt) {

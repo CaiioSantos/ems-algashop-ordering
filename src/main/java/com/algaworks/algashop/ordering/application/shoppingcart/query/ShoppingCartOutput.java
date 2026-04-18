@@ -19,5 +19,5 @@ public class ShoppingCartOutput {
   private UUID customerId;
   private Integer totalItems;
   private BigDecimal totalAmount;
-  private List<ShoppingCartItemOutput> items = new ArrayList<>();
+  private List<ShoppingCartItemOutput> items;
 }

@@ -71,7 +71,7 @@ public class OrderQueryServiceImpl implements OrderQueryService {
         criteriaQuery.select(
                 builder.construct(OrderSummaryOutput.class,
                         root.get("id"),
-                        root.get("totaItems"),
+                        root.get("totalItems"),
                         root.get("totalAmount"),
                         root.get("placedAt"),
                         root.get("paidAt"),

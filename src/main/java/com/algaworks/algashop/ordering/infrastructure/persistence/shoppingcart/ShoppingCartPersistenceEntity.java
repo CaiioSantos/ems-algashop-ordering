@@ -36,7 +36,6 @@ public class ShoppingCartPersistenceEntity
     private CustomerPersistenceEntity customer;
     private BigDecimal totalAmount;
     private Integer totalItems;
-    private OffsetDateTime createAt;
 
     @OneToMany(mappedBy = "shoppingCart", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<ShoppingCartItemPersistenceEntity> items = new HashSet<>();

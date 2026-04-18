@@ -24,7 +24,7 @@ public class ShoppingCart
     private CustomerId customerId;
     private Money totalAmount;
     private Quantity totalItens;
-    private OffsetDateTime createAt;
+    private OffsetDateTime createdAt;
 
     private Set<ShoppingCartItem> items;
 
@@ -142,7 +142,7 @@ public class ShoppingCart
     }
 
     public OffsetDateTime createAt() {
-        return createAt;
+        return createdAt;
     }
 
     public Set<ShoppingCartItem > items() {
@@ -186,7 +186,7 @@ public class ShoppingCart
     }
 
     public void setCreateAt(OffsetDateTime createAt) {
-        this.createAt = createAt;
+        this.createdAt = createAt;
     }
 
     public void setItems(Set<ShoppingCartItem> items) {
