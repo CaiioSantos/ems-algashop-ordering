@@ -15,6 +15,7 @@ plugins {
 
 group = 'com.algaworks.algashop'
 version = '0.0.1-SNAPSHOT'
+description = 'Ordering Microservice'
 
 java {
 	toolchain {
