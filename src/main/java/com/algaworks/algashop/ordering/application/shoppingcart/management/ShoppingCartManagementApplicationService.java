@@ -16,6 +16,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class ShoppingCartManagementApplicationService {
 
     private final ShoppingCarts shoppingCarts;

@@ -1,24 +1,21 @@
 package com.algaworks.algashop.ordering.infrastructure.persistence.provider;
 
 
-import com.algaworks.algashop.ordering.domain.customer.CustomerTestDataBuilder;
 import com.algaworks.algashop.ordering.domain.commons.Money;
-import com.algaworks.algashop.ordering.domain.product.Product;
 import com.algaworks.algashop.ordering.domain.commons.Quantity;
+import com.algaworks.algashop.ordering.domain.customer.CustomerId;
+import com.algaworks.algashop.ordering.domain.customer.CustomerTestDataBuilder;
+import com.algaworks.algashop.ordering.domain.product.Product;
 import com.algaworks.algashop.ordering.domain.product.ProductId;
 import com.algaworks.algashop.ordering.domain.product.ProductTestDataBuilder;
 import com.algaworks.algashop.ordering.domain.shoppingcart.ShoppingCart;
 import com.algaworks.algashop.ordering.domain.shoppingcart.ShoppingCartItem;
 import com.algaworks.algashop.ordering.domain.shoppingcart.ShoppingCartTestDataBuilder;
-import com.algaworks.algashop.ordering.infrastructure.persistence.customer.CustomerPersistenceEntityAssembler;
-import com.algaworks.algashop.ordering.infrastructure.persistence.customer.CustomersPersistenceProvider;
-import com.algaworks.algashop.ordering.infrastructure.persistence.shoppingcart.ShoppingCartPersistenceEntityAssembler;
 import com.algaworks.algashop.ordering.infrastructure.persistence.SpringDataAuditingConfig;
+import com.algaworks.algashop.ordering.infrastructure.persistence.customer.CustomerPersistenceEntityAssembler;
 import com.algaworks.algashop.ordering.infrastructure.persistence.customer.CustomerPersistenceEntityDisassembler;
-import com.algaworks.algashop.ordering.infrastructure.persistence.shoppingcart.ShoppingCartPersistenceEntityDisassembler;
-import com.algaworks.algashop.ordering.infrastructure.persistence.shoppingcart.ShoppingCartPersistenceEntityRepository;
-import com.algaworks.algashop.ordering.infrastructure.persistence.shoppingcart.ShoppingCartUpdateProvider;
-import com.algaworks.algashop.ordering.infrastructure.persistence.shoppingcart.ShoppingCartsPersistenceProvider;
+import com.algaworks.algashop.ordering.infrastructure.persistence.customer.CustomersPersistenceProvider;
+import com.algaworks.algashop.ordering.infrastructure.persistence.shoppingcart.*;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,9 +23,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
-import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.UUID;
 
 @DataJpaTest
 @Import({
@@ -41,8 +41,9 @@ import org.springframework.transaction.annotation.Transactional;
         CustomerPersistenceEntityDisassembler.class,
         SpringDataAuditingConfig.class
 })
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@Sql(scripts = "classpath:db/clean/afterMigrate.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+@TestPropertySource(properties = "spring.flyway.locations=classpath:db/migration,classpath:db/testdata")
 class ShoppingCartUpdateProviderIT {
 
     private ShoppingCartsPersistenceProvider persistenceProvider;
@@ -74,7 +75,7 @@ class ShoppingCartUpdateProviderIT {
     void shouldUpdateItemPriceAndTotalAmount() {
         ShoppingCart shoppingCart = ShoppingCartTestDataBuilder.aShoppingCart()
                 .withItems(false)
-                .customerId(CustomerTestDataBuilder.DEFAULT_CUSTOMER_ID)
+                .customerId(new CustomerId(UUID.fromString("3a4b5c6d-7e8f-9a0b-1c2d-3e4f5a6b7c8d")))
                 .build();
 
         Product product1 = ProductTestDataBuilder.aProduct().price(new Money("2000")).build();
@@ -108,7 +109,7 @@ class ShoppingCartUpdateProviderIT {
     void shouldUpdateItemAvailability() {
         ShoppingCart shoppingCart = ShoppingCartTestDataBuilder.aShoppingCart()
                 .withItems(false)
-                .customerId(CustomerTestDataBuilder.DEFAULT_CUSTOMER_ID)
+                .customerId(new CustomerId(UUID.fromString("3a4b5c6d-7e8f-9a0b-1c2d-3e4f5a6b7c8d")))
                 .build();
 
         Product product1 = ProductTestDataBuilder.aProduct().price(new Money("2000")).inStock(true).build();

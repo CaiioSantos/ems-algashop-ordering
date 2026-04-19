@@ -36,12 +36,16 @@ public class ShoppingCartsPersistenceProvider implements ShoppingCarts {
     @Transactional(readOnly = false)
     public void remove(ShoppingCart shoppingCart) {
         this.persistenceEntityRepository.delete(assembler.fromDomain(shoppingCart));
+        entityManager.flush();
+        entityManager.clear();
     }
 
     @Override
     @Transactional(readOnly = false)
     public void remove(ShoppingCartId shoppingCartId) {
         this.persistenceEntityRepository.deleteById(shoppingCartId.value());
+        entityManager.flush();
+        entityManager.clear();
     }
 
     @Override
@@ -56,6 +60,7 @@ public class ShoppingCartsPersistenceProvider implements ShoppingCarts {
     }
 
     @Override
+    @Transactional(readOnly = false)
     public void add(ShoppingCart aggregateRoot) {
         UUID ShoppingCartId = aggregateRoot.id().value();
 

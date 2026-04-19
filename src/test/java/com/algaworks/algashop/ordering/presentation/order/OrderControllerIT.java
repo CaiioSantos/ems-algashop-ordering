@@ -25,7 +25,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.jdbc.Sql;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
@@ -38,7 +38,8 @@ import static io.restassured.config.JsonConfig.jsonConfig;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 //@AutoConfigureStubRunner(stubsMode = StubRunnerProperties.StubsMode.LOCAL,
 //        ids = "com.algaworks.algashop:product-catalog:0.0.1-SNAPSHOT:8781")
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
+@Sql(scripts = "classpath:db/testdata/afterMigrate.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_CLASS)
+@Sql(scripts = "classpath:db/clean/afterMigrate.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_CLASS)
 public class OrderControllerIT {
 
     @LocalServerPort
@@ -55,7 +56,7 @@ public class OrderControllerIT {
 
     private static final UUID validCustomerId = UUID.fromString("6e148bd5-47f6-4022-b9da-07cfaa294f7a");
     private static final UUID validProductId = UUID.fromString("fffe6ec2-7103-48b3-8e4f-3b58e43fb75a");
-    private static final UUID validShoppingCartId = UUID.fromString("4f31582a-66e6-4601-a9d3-ff608c2d4461");
+
 
     private WireMockServer wireMockProductCatalog;
     private WireMockServer wireMockRapidex;
@@ -66,8 +67,6 @@ public class OrderControllerIT {
         RestAssured.port = port;
 
         RestAssured.config().jsonConfig(jsonConfig().numberReturnType(JsonPathConfig.NumberReturnType.BIG_DECIMAL));
-
-        initDatabase();
 
         wireMockRapidex = new WireMockServer(options()
                 .port(8780)
@@ -86,14 +85,6 @@ public class OrderControllerIT {
     public void after() {
         wireMockRapidex.stop();
         wireMockProductCatalog.stop();
-    }
-
-    private void initDatabase() {
-
-        customerRepository.saveAndFlush(
-                CustomerPersistenceEntityTestDataBuilder.aCustomer().id(validCustomerId).build()
-        );
-
     }
 
     @Test
@@ -206,21 +197,6 @@ public class OrderControllerIT {
 
     @Test
     public void shouldCreateOrderUsingShoppingCart() {
-        var customer = customerRepository.findById(validCustomerId);
-
-        var shoppingCartPersistence = ShoppingCartPersistenceEntity.builder()
-                .id(validShoppingCartId)
-                .customer(customer.get())
-                .totalItems(3)
-                .totalAmount(new BigDecimal(1250))
-                .createdAt(OffsetDateTime.now())
-                .items(Set.of(
-                        ShoppingCartPersistenceEntityTestDataBuilder.existingItem().available(true).build(),
-                        ShoppingCartPersistenceEntityTestDataBuilder.existingItemAlt().available(true).build()
-                ))
-                .build();
-
-        shoppingCartRepository.saveAndFlush(shoppingCartPersistence);
 
         String json = AlgaShopResourceUtils.readContent("json/create-order-with-shopping-cart.json");
 
