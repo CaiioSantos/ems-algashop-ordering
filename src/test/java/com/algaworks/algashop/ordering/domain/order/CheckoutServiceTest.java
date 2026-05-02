@@ -52,7 +52,7 @@ public class CheckoutServiceTest {
         Quantity expectedOrderTotalItems = shoppingCart.totalItens();
         int expectedOrderItensCount = shoppingCart.items().size();
 
-        Order order = checkoutService.checkout(customer,shoppingCart,billing,shipping,paymentMethod);
+        Order order = checkoutService.checkout(customer,shoppingCart,billing,shipping,paymentMethod, new CreditCardId());
 
         Assertions.assertThat(order).isNotNull();
         Assertions.assertThat(order.id()).isNotNull();
@@ -89,7 +89,7 @@ public class CheckoutServiceTest {
         PaymentMethod paymentMethod = PaymentMethod.CREDIT_CARD;
 
         Assertions.assertThatExceptionOfType(ShoppingCartCantProceedToCheckoutException.class)
-                .isThrownBy(() -> checkoutService.checkout(customer, shoppingCart, billingInfo, shippingInfo, paymentMethod));
+                .isThrownBy(() -> checkoutService.checkout(customer, shoppingCart, billingInfo, shippingInfo, paymentMethod, new CreditCardId()));
 
         Assertions.assertThat(shoppingCart.isEmpty()).isFalse();
         Assertions.assertThat(shoppingCart.items()).hasSize(1);
@@ -112,7 +112,7 @@ public class CheckoutServiceTest {
         Quantity expectedOrderTotalItems = shoppingCart.totalItens();
         int expectedOrderItemsCount = shoppingCart.items().size();
 
-        Order order = checkoutService.checkout(customer, shoppingCart, billingInfo, shippingInfo, paymentMethod);
+        Order order = checkoutService.checkout(customer, shoppingCart, billingInfo, shippingInfo, paymentMethod, new CreditCardId());
 
         Assertions.assertThat(order).isNotNull();
         Assertions.assertThat(order.id()).isNotNull();

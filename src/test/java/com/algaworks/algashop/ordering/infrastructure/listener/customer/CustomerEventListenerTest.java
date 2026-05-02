@@ -11,7 +11,6 @@ import com.algaworks.algashop.ordering.domain.order.OrderReadyEvent;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
@@ -20,8 +19,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
-import static com.algaworks.algashop.ordering.application.customer.notification.CustomerNotificationService.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static com.algaworks.algashop.ordering.application.customer.notification.CustomerNotificationService.NotifyNewRegistrationInput;
 
 @SpringBootTest
 class CustomerEventListenerTest {

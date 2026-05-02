@@ -49,7 +49,7 @@ public class BuyNowServiceTest {
         PaymentMethod paymentMethod = PaymentMethod.CREDIT_CARD;
         Quantity quantity = new Quantity(3);
 
-        Order order = buyNowService.buyNow(product,customer,billing,shipping,quantity,paymentMethod);
+        Order order = buyNowService.buyNow(product,customer,billing,shipping,quantity,paymentMethod, new CreditCardId());
 
         Assertions.assertThat(order).isNotNull();
         Assertions.assertThat(order.id()).isNotNull();
@@ -83,7 +83,7 @@ public class BuyNowServiceTest {
         PaymentMethod paymentMethod = PaymentMethod.CREDIT_CARD;
         Quantity quantity = new Quantity(3);
 
-        Order order = buyNowService.buyNow(product,customer,billing,shipping,quantity,paymentMethod);
+        Order order = buyNowService.buyNow(product,customer,billing,shipping,quantity,paymentMethod, new CreditCardId());
 
         Assertions.assertThat(order).isNotNull();
         Assertions.assertThat(order.id()).isNotNull();
@@ -112,6 +112,6 @@ public class BuyNowServiceTest {
         PaymentMethod paymentMethod = PaymentMethod.CREDIT_CARD;
 
         Assertions.assertThatExceptionOfType(ProductOutOfStockException.class)
-                .isThrownBy(() -> buyNowService.buyNow(product, customer, billingInfo, shippingInfo, quantity, paymentMethod));
+                .isThrownBy(() -> buyNowService.buyNow(product, customer, billingInfo, shippingInfo, quantity, paymentMethod, new CreditCardId()));
     }
 }

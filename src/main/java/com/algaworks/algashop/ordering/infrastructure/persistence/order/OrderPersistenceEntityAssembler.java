@@ -38,6 +38,11 @@ public class OrderPersistenceEntityAssembler {
         orderPersistenceEntity.setReadyAt(order.readyAt());
         orderPersistenceEntity.setVersion(order.version());
         orderPersistenceEntity.addEvents(order.domainEvents());
+
+        if (order.creditCardId() != null) {
+            orderPersistenceEntity.setCreditCardId(order.creditCardId().id());
+        }
+
         Set<OrderItemPersistenceEntity> mergeItens =  this.mergeItens(order, orderPersistenceEntity);
         orderPersistenceEntity.replaceItems(mergeItens);
 

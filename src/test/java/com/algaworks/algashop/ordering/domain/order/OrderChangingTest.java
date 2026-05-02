@@ -21,9 +21,9 @@ public class OrderChangingTest {
         Assertions.assertThatExceptionOfType(OrderCannotBeEditedException.class)
                 .isThrownBy(() -> order.changeItemQuantity(new OrderItemId(),new Quantity(2)));
         Assertions.assertThatExceptionOfType(OrderCannotBeEditedException.class)
-                .isThrownBy(() -> order.changePaymentMethod(PaymentMethod.CREDIT_CARD));
+                .isThrownBy(() -> order.changePaymentMethod(PaymentMethod.CREDIT_CARD, new CreditCardId()));
         Assertions.assertThatExceptionOfType(OrderCannotBeEditedException.class)
-                .isThrownBy(() -> order.changePaymentMethod(PaymentMethod.GATEWAY_BALANCE));
+                .isThrownBy(() -> order.changePaymentMethod(PaymentMethod.GATEWAY_BALANCE, null));
     }
 
     @Test

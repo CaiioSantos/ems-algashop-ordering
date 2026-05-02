@@ -114,12 +114,14 @@ public class OrderControllerIT {
 
     @Test
     public void shouldCreateOrderUsingProduct_DTO() {
+        UUID creditCardId = UUID.randomUUID();
         BuyNowInput input = BuyNowInputTestDataBuilder.aBuyNowInput()
                 .productId(validProductId)
                 .customerId(validCustomerId)
+                .creditCardId(creditCardId)
                 .build();
 
-        String createdOrderId = RestAssured
+        OrderDetailOutput createdOrderId = RestAssured
                 .given()
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .contentType("application/vnd.order-with-product.v1+json")
@@ -133,9 +135,12 @@ public class OrderControllerIT {
                 .body("id", Matchers.not(Matchers.emptyString()),
                         "customer.id", Matchers.is(validCustomerId.toString()))
                 .extract()
-                .jsonPath().getString("id");
+                        .body().as(OrderDetailOutput.class);
+                //.jsonPath().getString("id");
 
-        boolean orderExists = orderRepository.existsById(new OrderId(createdOrderId).value().toLong());
+        Assertions.assertThat(createdOrderId.getCreditCardId()).isEqualTo(creditCardId);
+
+        boolean orderExists = orderRepository.existsById(new OrderId(createdOrderId.getId()).value().toLong());
         Assertions.assertThat(orderExists).isTrue();
 
     }
