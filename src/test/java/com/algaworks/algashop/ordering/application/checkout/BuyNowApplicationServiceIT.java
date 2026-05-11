@@ -1,5 +1,6 @@
 package com.algaworks.algashop.ordering.application.checkout;
 
+import com.algaworks.algashop.ordering.application.AbstractApplicationIT;
 import com.algaworks.algashop.ordering.domain.commons.Money;
 import com.algaworks.algashop.ordering.domain.customer.CustomerTestDataBuilder;
 import com.algaworks.algashop.ordering.domain.customer.Customers;
@@ -21,9 +22,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.util.Optional;
 
-@SpringBootTest
-@Transactional
-class BuyNowApplicationServiceIT {
+
+class BuyNowApplicationServiceIT extends AbstractApplicationIT {
 
     @Autowired
     private BuyNowApplicationService buyNowApplicationService;

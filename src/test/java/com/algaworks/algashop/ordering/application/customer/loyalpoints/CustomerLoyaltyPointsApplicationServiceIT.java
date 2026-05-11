@@ -1,5 +1,6 @@
 package com.algaworks.algashop.ordering.application.customer.loyalpoints;
 
+import com.algaworks.algashop.ordering.application.AbstractApplicationIT;
 import com.algaworks.algashop.ordering.domain.commons.Email;
 import com.algaworks.algashop.ordering.domain.commons.Money;
 import com.algaworks.algashop.ordering.domain.commons.Quantity;
@@ -18,9 +19,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
-@SpringBootTest
-@Transactional
-class CustomerLoyaltyPointsApplicationServiceIT {
+
+class CustomerLoyaltyPointsApplicationServiceIT extends AbstractApplicationIT {
 
     @Autowired
     private CustomerLoyaltyPointsApplicationService loyaltyPointsService;

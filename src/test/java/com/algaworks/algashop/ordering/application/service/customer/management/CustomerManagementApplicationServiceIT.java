@@ -1,6 +1,7 @@
 package com.algaworks.algashop.ordering.application.service.customer.management;
 
 
+import com.algaworks.algashop.ordering.application.AbstractApplicationIT;
 import com.algaworks.algashop.ordering.application.customer.management.CustomerInput;
 import com.algaworks.algashop.ordering.application.customer.management.CustomerManagementApplicationService;
 import com.algaworks.algashop.ordering.application.customer.management.CustomerUpdateInput;
@@ -27,15 +28,9 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 import java.time.LocalDate;
 import java.util.UUID;
 
-@SpringBootTest
-@Transactional
-@Testcontainers
-class CustomerManagementApplicationServiceIT {
 
-    @Container
-    @ServiceConnection
-    private static PostgreSQLContainer postgreSQLContainer
-            = new PostgreSQLContainer("postgres:17-alpine");
+class CustomerManagementApplicationServiceIT extends AbstractApplicationIT {
+
 
     @Autowired
     private CustomerManagementApplicationService customerManagementApplicationService;

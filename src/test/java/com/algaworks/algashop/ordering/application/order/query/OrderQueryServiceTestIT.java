@@ -1,5 +1,6 @@
 package com.algaworks.algashop.ordering.application.order.query;
 
+import com.algaworks.algashop.ordering.application.AbstractApplicationIT;
 import com.algaworks.algashop.ordering.application.utility.PageFilter;
 import com.algaworks.algashop.ordering.domain.customer.Customer;
 import com.algaworks.algashop.ordering.domain.customer.CustomerId;
@@ -17,9 +18,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
 
-@SpringBootTest
-@Transactional
-class OrderQueryServiceTestIT {
+
+class OrderQueryServiceTestIT extends AbstractApplicationIT {
 
     @Autowired
     private OrderQueryService orderQueryService;

@@ -1,5 +1,6 @@
 package com.algaworks.algashop.ordering.application.order.management;
 
+import com.algaworks.algashop.ordering.application.AbstractApplicationIT;
 import com.algaworks.algashop.ordering.application.customer.loyalpoints.CustomerLoyaltyPointsApplicationService;
 import com.algaworks.algashop.ordering.domain.customer.CustomerTestDataBuilder;
 import com.algaworks.algashop.ordering.domain.customer.Customers;
@@ -18,9 +19,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 import java.util.UUID;
 
-@SpringBootTest
-@Transactional
-class OrderManagementApplicationServiceIT {
+
+class OrderManagementApplicationServiceIT extends AbstractApplicationIT {
     @Autowired
     private OrderManagementApplicationService service;
 

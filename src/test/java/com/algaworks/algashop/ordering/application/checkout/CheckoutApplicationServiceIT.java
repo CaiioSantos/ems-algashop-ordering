@@ -1,5 +1,6 @@
 package com.algaworks.algashop.ordering.application.checkout;
 
+import com.algaworks.algashop.ordering.application.AbstractApplicationIT;
 import com.algaworks.algashop.ordering.domain.commons.Money;
 import com.algaworks.algashop.ordering.domain.commons.Quantity;
 import com.algaworks.algashop.ordering.domain.customer.CustomerTestDataBuilder;
@@ -26,9 +27,8 @@ import java.time.LocalDate;
 import java.util.Optional;
 import java.util.UUID;
 
-@SpringBootTest
-@Transactional
-class CheckoutApplicationServiceIT {
+
+class CheckoutApplicationServiceIT extends AbstractApplicationIT {
 
     @Autowired
     private CheckoutApplicationService service;
