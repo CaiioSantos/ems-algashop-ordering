@@ -1,6 +1,7 @@
 package com.algaworks.algashop.ordering.infrastructure.persistence.repository;
 
 import com.algaworks.algashop.ordering.domain.customer.CustomerTestDataBuilder;
+import com.algaworks.algashop.ordering.infrastructure.persistence.AbstractPersistenceIT;
 import com.algaworks.algashop.ordering.infrastructure.persistence.SpringDataAuditingConfig;
 import com.algaworks.algashop.ordering.infrastructure.persistence.customer.CustomerPersistenceEntity;
 import com.algaworks.algashop.ordering.infrastructure.persistence.customer.CustomerPersistenceEntityRepository;
@@ -17,10 +18,8 @@ import org.springframework.context.annotation.Import;
 
 import java.util.UUID;
 
-@DataJpaTest
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@Import(SpringDataAuditingConfig.class)
-public class ShoppingCartPersistenceEntityRepositoryIT {
+
+public class ShoppingCartPersistenceEntityRepositoryIT extends AbstractPersistenceIT {
 
     private final ShoppingCartPersistenceEntityRepository persistenceEntityRepository;
     private final CustomerPersistenceEntityRepository customerPersistenceEntityRepository;

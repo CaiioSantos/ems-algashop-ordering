@@ -1,6 +1,7 @@
 package com.algaworks.algashop.ordering.domain.customer;
 
 
+import com.algaworks.algashop.ordering.domain.AbstractDomainIT;
 import com.algaworks.algashop.ordering.domain.commons.Email;
 import com.algaworks.algashop.ordering.domain.commons.FullName;
 import com.algaworks.algashop.ordering.infrastructure.persistence.customer.CustomerPersistenceEntityAssembler;
@@ -19,12 +20,8 @@ import java.util.UUID;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-@DataJpaTest
-@Import({CustomersPersistenceProvider.class,
-        CustomerPersistenceEntityAssembler.class,
-        CustomerPersistenceEntityDisassembler.class})
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-class CustomersIT {
+
+class CustomersIT extends AbstractDomainIT {
 
     private Customers customers;
 

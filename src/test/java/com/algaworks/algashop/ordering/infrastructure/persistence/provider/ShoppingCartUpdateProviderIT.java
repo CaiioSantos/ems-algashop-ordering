@@ -3,6 +3,7 @@ package com.algaworks.algashop.ordering.infrastructure.persistence.provider;
 
 import com.algaworks.algashop.ordering.domain.commons.Money;
 import com.algaworks.algashop.ordering.domain.commons.Quantity;
+import com.algaworks.algashop.ordering.domain.customer.Customer;
 import com.algaworks.algashop.ordering.domain.customer.CustomerId;
 import com.algaworks.algashop.ordering.domain.customer.CustomerTestDataBuilder;
 import com.algaworks.algashop.ordering.domain.product.Product;
@@ -11,6 +12,7 @@ import com.algaworks.algashop.ordering.domain.product.ProductTestDataBuilder;
 import com.algaworks.algashop.ordering.domain.shoppingcart.ShoppingCart;
 import com.algaworks.algashop.ordering.domain.shoppingcart.ShoppingCartItem;
 import com.algaworks.algashop.ordering.domain.shoppingcart.ShoppingCartTestDataBuilder;
+import com.algaworks.algashop.ordering.infrastructure.persistence.AbstractPersistenceIT;
 import com.algaworks.algashop.ordering.infrastructure.persistence.SpringDataAuditingConfig;
 import com.algaworks.algashop.ordering.infrastructure.persistence.customer.CustomerPersistenceEntityAssembler;
 import com.algaworks.algashop.ordering.infrastructure.persistence.customer.CustomerPersistenceEntityDisassembler;
@@ -28,9 +30,9 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
 import java.util.UUID;
 
-@DataJpaTest
 @Import({
         ShoppingCartUpdateProvider.class,
         ShoppingCartsPersistenceProvider.class,
@@ -41,10 +43,8 @@ import java.util.UUID;
         CustomerPersistenceEntityDisassembler.class,
         SpringDataAuditingConfig.class
 })
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Sql(scripts = "classpath:db/clean/afterMigrate.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
-@TestPropertySource(properties = "spring.flyway.locations=classpath:db/migration,classpath:db/testdata")
-class ShoppingCartUpdateProviderIT {
+class ShoppingCartUpdateProviderIT extends AbstractPersistenceIT {
 
     private ShoppingCartsPersistenceProvider persistenceProvider;
     private CustomersPersistenceProvider customersPersistenceProvider;
@@ -72,10 +72,12 @@ class ShoppingCartUpdateProviderIT {
     }
 
     @Test
+    @Transactional(propagation = Propagation.NEVER)
     void shouldUpdateItemPriceAndTotalAmount() {
+        Optional<Customer> customer = customersPersistenceProvider.ofId(CustomerTestDataBuilder.DEFAULT_CUSTOMER_ID);
         ShoppingCart shoppingCart = ShoppingCartTestDataBuilder.aShoppingCart()
                 .withItems(false)
-                .customerId(new CustomerId(UUID.fromString("3a4b5c6d-7e8f-9a0b-1c2d-3e4f5a6b7c8d")))
+                .customerId(customer.get().id())
                 .build();
 
         Product product1 = ProductTestDataBuilder.aProduct().price(new Money("2000")).build();
@@ -106,10 +108,12 @@ class ShoppingCartUpdateProviderIT {
     }
 
     @Test
+    @Transactional(propagation = Propagation.NEVER)
     void shouldUpdateItemAvailability() {
+        Optional<Customer> customer = customersPersistenceProvider.ofId(CustomerTestDataBuilder.DEFAULT_CUSTOMER_ID);
         ShoppingCart shoppingCart = ShoppingCartTestDataBuilder.aShoppingCart()
                 .withItems(false)
-                .customerId(new CustomerId(UUID.fromString("3a4b5c6d-7e8f-9a0b-1c2d-3e4f5a6b7c8d")))
+                .customerId(customer.get().id())
                 .build();
 
         Product product1 = ProductTestDataBuilder.aProduct().price(new Money("2000")).inStock(true).build();
