@@ -1,37 +1,32 @@
 package com.algaworks.algashop.ordering.infrastructure.persistence.provider;
 
 
-import com.algaworks.algashop.ordering.domain.commons.Money;
-import com.algaworks.algashop.ordering.domain.commons.Quantity;
-import com.algaworks.algashop.ordering.domain.customer.Customer;
-import com.algaworks.algashop.ordering.domain.customer.CustomerId;
-import com.algaworks.algashop.ordering.domain.customer.CustomerTestDataBuilder;
-import com.algaworks.algashop.ordering.domain.product.Product;
-import com.algaworks.algashop.ordering.domain.product.ProductId;
-import com.algaworks.algashop.ordering.domain.product.ProductTestDataBuilder;
-import com.algaworks.algashop.ordering.domain.shoppingcart.ShoppingCart;
-import com.algaworks.algashop.ordering.domain.shoppingcart.ShoppingCartItem;
-import com.algaworks.algashop.ordering.domain.shoppingcart.ShoppingCartTestDataBuilder;
+import com.algaworks.algashop.ordering.core.domain.model.commons.Money;
+import com.algaworks.algashop.ordering.core.domain.model.commons.Quantity;
+import com.algaworks.algashop.ordering.core.domain.model.customer.Customer;
+import com.algaworks.algashop.ordering.core.domain.model.customer.CustomerTestDataBuilder;
+import com.algaworks.algashop.ordering.core.domain.model.product.Product;
+import com.algaworks.algashop.ordering.core.domain.model.product.ProductId;
+import com.algaworks.algashop.ordering.core.domain.model.product.ProductTestDataBuilder;
+import com.algaworks.algashop.ordering.core.domain.model.shoppingcart.ShoppingCart;
+import com.algaworks.algashop.ordering.core.domain.model.shoppingcart.ShoppingCartItem;
+import com.algaworks.algashop.ordering.core.domain.model.shoppingcart.ShoppingCartTestDataBuilder;
+import com.algaworks.algashop.ordering.infrastructure.adapters.out.persistence.shoppingcart.*;
 import com.algaworks.algashop.ordering.infrastructure.persistence.AbstractPersistenceIT;
 import com.algaworks.algashop.ordering.infrastructure.persistence.SpringDataAuditingConfig;
 import com.algaworks.algashop.ordering.infrastructure.persistence.customer.CustomerPersistenceEntityAssembler;
 import com.algaworks.algashop.ordering.infrastructure.persistence.customer.CustomerPersistenceEntityDisassembler;
 import com.algaworks.algashop.ordering.infrastructure.persistence.customer.CustomersPersistenceProvider;
-import com.algaworks.algashop.ordering.infrastructure.persistence.shoppingcart.*;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
-import java.util.UUID;
 
 @Import({
         ShoppingCartUpdateProvider.class,

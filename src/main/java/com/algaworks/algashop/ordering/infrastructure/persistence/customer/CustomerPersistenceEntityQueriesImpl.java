@@ -1,6 +1,6 @@
 package com.algaworks.algashop.ordering.infrastructure.persistence.customer;
 
-import com.algaworks.algashop.ordering.application.customer.query.CustomerOutput;
+import com.algaworks.algashop.ordering.core.application.customer.query.CustomerOutput;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.TypedQuery;
@@ -15,7 +15,7 @@ public class CustomerPersistenceEntityQueriesImpl implements CustomerPersistence
     private final EntityManager entityManager;
 
     private static final String findByIdAsOutputJPQL = """
-            SELECT new com.algaworks.algashop.ordering.application.customer.query.CustomerOutput(
+            SELECT new com.algaworks.algashop.ordering.core.application.customer.query.CustomerOutput(
                 c.id,
                 c.firstName,
                 c.lastName,

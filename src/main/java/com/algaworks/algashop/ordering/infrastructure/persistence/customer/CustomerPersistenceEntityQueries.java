@@ -1,6 +1,6 @@
 package com.algaworks.algashop.ordering.infrastructure.persistence.customer;
 
-import com.algaworks.algashop.ordering.application.customer.query.CustomerOutput;
+import com.algaworks.algashop.ordering.core.application.customer.query.CustomerOutput;
 
 import java.util.Optional;
 import java.util.UUID;

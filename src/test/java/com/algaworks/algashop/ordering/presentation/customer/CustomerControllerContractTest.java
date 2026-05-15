@@ -1,13 +1,18 @@
 package com.algaworks.algashop.ordering.presentation.customer;
 
-import com.algaworks.algashop.ordering.application.commons.AddressData;
-import com.algaworks.algashop.ordering.application.customer.management.CustomerInput;
-import com.algaworks.algashop.ordering.application.customer.management.CustomerManagementApplicationService;
-import com.algaworks.algashop.ordering.application.customer.query.*;
-import com.algaworks.algashop.ordering.application.shoppingcart.query.ShoppingCartQueryService;
-import com.algaworks.algashop.ordering.domain.DomainException;
-import com.algaworks.algashop.ordering.domain.customer.CustomerEmailsInUseException;
-import com.algaworks.algashop.ordering.domain.customer.CustomerNotFoundException;
+import com.algaworks.algashop.ordering.core.application.customer.query.CustomerOutputTestDataBuilder;
+import com.algaworks.algashop.ordering.core.application.customer.query.CustomerSummaryOutputTestDataBuilder;
+import com.algaworks.algashop.ordering.core.application.commons.AddressData;
+import com.algaworks.algashop.ordering.core.application.customer.management.CustomerInput;
+import com.algaworks.algashop.ordering.core.application.customer.management.CustomerManagementApplicationService;
+import com.algaworks.algashop.ordering.core.application.customer.query.CustomerFilter;
+import com.algaworks.algashop.ordering.core.application.customer.query.CustomerOutput;
+import com.algaworks.algashop.ordering.core.application.customer.query.CustomerQueryService;
+import com.algaworks.algashop.ordering.core.application.customer.query.CustomerSummaryOutput;
+import com.algaworks.algashop.ordering.core.ports.in.shoppingcart.ForQueryingShoppingCarts;
+import com.algaworks.algashop.ordering.core.domain.model.DomainException;
+import com.algaworks.algashop.ordering.core.domain.model.customer.CustomerEmailsInUseException;
+import com.algaworks.algashop.ordering.core.domain.model.customer.CustomerNotFoundException;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
@@ -40,7 +45,7 @@ class CustomerControllerContractTest {
     private CustomerManagementApplicationService customerManagementApplicationService;
 
     @MockitoBean
-    private ShoppingCartQueryService shoppingCartQueryService;
+    private ForQueryingShoppingCarts shoppingCartQueryService;
 
     @BeforeEach
     public void setupAll() {

@@ -1,13 +1,13 @@
 package com.algaworks.algashop.ordering.infrastructure.listener.customer;
 
-import com.algaworks.algashop.ordering.application.customer.loyalpoints.CustomerLoyaltyPointsApplicationService;
-import com.algaworks.algashop.ordering.application.customer.notification.CustomerNotificationService;
-import com.algaworks.algashop.ordering.domain.commons.Email;
-import com.algaworks.algashop.ordering.domain.commons.FullName;
-import com.algaworks.algashop.ordering.domain.customer.CustomerId;
-import com.algaworks.algashop.ordering.domain.customer.CustomerRegisteredEvent;
-import com.algaworks.algashop.ordering.domain.order.OrderId;
-import com.algaworks.algashop.ordering.domain.order.OrderReadyEvent;
+import com.algaworks.algashop.ordering.core.application.customer.loyalpoints.CustomerLoyaltyPointsApplicationService;
+import com.algaworks.algashop.ordering.core.application.customer.notification.CustomerNotificationService;
+import com.algaworks.algashop.ordering.core.domain.model.commons.Email;
+import com.algaworks.algashop.ordering.core.domain.model.commons.FullName;
+import com.algaworks.algashop.ordering.core.domain.model.customer.CustomerId;
+import com.algaworks.algashop.ordering.core.domain.model.customer.CustomerRegisteredEvent;
+import com.algaworks.algashop.ordering.core.domain.model.order.OrderId;
+import com.algaworks.algashop.ordering.core.domain.model.order.OrderReadyEvent;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
-import static com.algaworks.algashop.ordering.application.customer.notification.CustomerNotificationService.NotifyNewRegistrationInput;
+import static com.algaworks.algashop.ordering.core.application.customer.notification.CustomerNotificationService.NotifyNewRegistrationInput;
 
 @SpringBootTest
 class CustomerEventListenerTest {

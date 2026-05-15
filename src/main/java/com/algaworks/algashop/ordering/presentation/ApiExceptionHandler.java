@@ -1,8 +1,8 @@
 package com.algaworks.algashop.ordering.presentation;
 
-import com.algaworks.algashop.ordering.domain.DomainEntityNotFoundException;
-import com.algaworks.algashop.ordering.domain.DomainException;
-import com.algaworks.algashop.ordering.domain.customer.CustomerEmailsInUseException;
+import com.algaworks.algashop.ordering.core.domain.model.DomainEntityNotFoundException;
+import com.algaworks.algashop.ordering.core.domain.model.DomainException;
+import com.algaworks.algashop.ordering.core.domain.model.customer.CustomerEmailsInUseException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSource;

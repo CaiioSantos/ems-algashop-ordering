@@ -1,10 +1,10 @@
 package com.algaworks.algashop.ordering.infrastructure.listener.customer;
 
-import com.algaworks.algashop.ordering.application.customer.loyalpoints.CustomerLoyaltyPointsApplicationService;
-import com.algaworks.algashop.ordering.application.customer.notification.CustomerNotificationService;
-import com.algaworks.algashop.ordering.domain.customer.CustomerArchivedEvent;
-import com.algaworks.algashop.ordering.domain.customer.CustomerRegisteredEvent;
-import com.algaworks.algashop.ordering.domain.order.OrderReadyEvent;
+import com.algaworks.algashop.ordering.core.application.customer.loyalpoints.CustomerLoyaltyPointsApplicationService;
+import com.algaworks.algashop.ordering.core.application.customer.notification.CustomerNotificationService;
+import com.algaworks.algashop.ordering.core.domain.model.customer.CustomerArchivedEvent;
+import com.algaworks.algashop.ordering.core.domain.model.customer.CustomerRegisteredEvent;
+import com.algaworks.algashop.ordering.core.domain.model.order.OrderReadyEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;

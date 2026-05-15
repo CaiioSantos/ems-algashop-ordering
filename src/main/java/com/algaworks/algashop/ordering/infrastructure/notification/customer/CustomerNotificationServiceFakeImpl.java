@@ -1,15 +1,10 @@
 package com.algaworks.algashop.ordering.infrastructure.notification.customer;
 
-import com.algaworks.algashop.ordering.application.customer.notification.CustomerNotificationService;
-import com.algaworks.algashop.ordering.domain.customer.Customer;
-import com.algaworks.algashop.ordering.domain.customer.CustomerId;
-import com.algaworks.algashop.ordering.domain.customer.CustomerNotFoundException;
-import com.algaworks.algashop.ordering.domain.customer.Customers;
+import com.algaworks.algashop.ordering.core.application.customer.notification.CustomerNotificationService;
+import com.algaworks.algashop.ordering.core.domain.model.customer.Customers;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
