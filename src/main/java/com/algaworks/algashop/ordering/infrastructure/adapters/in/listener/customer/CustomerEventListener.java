@@ -1,0 +1,39 @@
+package com.algaworks.algashop.ordering.infrastructure.adapters.in.listener.customer;
+
+import com.algaworks.algashop.ordering.core.application.customer.CustomerLoyaltyPointsApplicationService;
+import com.algaworks.algashop.ordering.core.ports.in.customer.ForAddingLoyaltypoints;
+import com.algaworks.algashop.ordering.core.ports.in.customer.ForConfirmCustomerRegistration;
+import com.algaworks.algashop.ordering.core.ports.out.customer.ForNotifyingCustomers;
+import com.algaworks.algashop.ordering.core.domain.model.customer.CustomerArchivedEvent;
+import com.algaworks.algashop.ordering.core.domain.model.customer.CustomerRegisteredEvent;
+import com.algaworks.algashop.ordering.core.domain.model.order.OrderReadyEvent;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.event.EventListener;
+import org.springframework.stereotype.Component;
+
+@Component
+@Slf4j
+@RequiredArgsConstructor
+public class CustomerEventListener {
+
+    private final ForConfirmCustomerRegistration confirmCustomerRegistration;
+    private final ForAddingLoyaltypoints forAddingLoyaltypoints;
+
+    @EventListener
+    public void listen(CustomerRegisteredEvent event) {
+        log.info("CustomerRegisteredEvent listen 1");
+        confirmCustomerRegistration.confirm(event.customerId().value());
+
+    }
+
+    public void listen(CustomerArchivedEvent event) {
+        log.info("CustomerArchivedEvent listen 1");
+    }
+
+    @EventListener
+    public void listen(OrderReadyEvent event) {
+        forAddingLoyaltypoints .addLoyaltyPoints(event.customerId().value(),
+                event.orderId().toString());
+    }
+}

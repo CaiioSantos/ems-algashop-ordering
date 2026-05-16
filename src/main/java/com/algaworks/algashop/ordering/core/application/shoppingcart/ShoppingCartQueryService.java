@@ -2,7 +2,7 @@ package com.algaworks.algashop.ordering.core.application.shoppingcart;
 
 import com.algaworks.algashop.ordering.core.ports.in.shoppingcart.ForQueryingShoppingCarts;
 import com.algaworks.algashop.ordering.core.ports.in.shoppingcart.ShoppingCartOutput;
-import com.algaworks.algashop.ordering.core.ports.out.shoppingcarts.ForObtainingShoppingCarts;
+import com.algaworks.algashop.ordering.core.ports.out.shoppingcart.ForObtainingShoppingCarts;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
