@@ -1,5 +1,8 @@
 package com.algaworks.algashop.ordering.core.application.checkout;
 
+import com.algaworks.algashop.ordering.core.application.order.BillingInputDisassembler;
+import com.algaworks.algashop.ordering.core.ports.in.checkout.ForBuyingWithShoppingCart;
+import com.algaworks.algashop.ordering.core.application.order.ShippingInputDisassembler;
 import com.algaworks.algashop.ordering.core.domain.model.DomainException;
 import com.algaworks.algashop.ordering.core.domain.model.commons.ZipCode;
 import com.algaworks.algashop.ordering.core.domain.model.customer.Customer;
@@ -12,6 +15,7 @@ import com.algaworks.algashop.ordering.core.domain.model.shoppingcart.ShoppingCa
 import com.algaworks.algashop.ordering.core.domain.model.shoppingcart.ShoppingCartId;
 import com.algaworks.algashop.ordering.core.domain.model.shoppingcart.ShoppingCartNotFoundException;
 import com.algaworks.algashop.ordering.core.domain.model.shoppingcart.ShoppingCarts;
+import com.algaworks.algashop.ordering.core.ports.in.checkout.CheckoutInput;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,7 +24,7 @@ import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
-public class CheckoutApplicationService {
+public class CheckoutApplicationService implements ForBuyingWithShoppingCart {
 
     private final ShoppingCarts shoppingCarts;
     private final ShippingCostService shippingCostService;

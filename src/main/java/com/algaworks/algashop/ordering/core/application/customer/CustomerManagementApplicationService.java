@@ -1,6 +1,7 @@
 package com.algaworks.algashop.ordering.core.application.customer;
 
-import com.algaworks.algashop.ordering.core.application.commons.AddressData;
+
+import com.algaworks.algashop.ordering.core.ports.in.commons.AddressData;
 import com.algaworks.algashop.ordering.core.ports.in.customer.CustomerOutput;
 import com.algaworks.algashop.ordering.core.application.utility.Mapper;
 import com.algaworks.algashop.ordering.core.domain.model.commons.*;

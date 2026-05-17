@@ -7,11 +7,11 @@ import com.algaworks.algashop.ordering.core.application.customer.CustomerManagem
 import com.algaworks.algashop.ordering.core.ports.in.customer.CustomerUpdateInput;
 import com.algaworks.algashop.ordering.core.ports.out.customer.ForNotifyingCustomers;
 import com.algaworks.algashop.ordering.core.ports.in.customer.CustomerOutput;
-import com.algaworks.algashop.ordering.core.ports.in.customer.CustomerQueryService;
 import com.algaworks.algashop.ordering.core.domain.model.customer.CustomerArchivedEvent;
 import com.algaworks.algashop.ordering.core.domain.model.customer.CustomerArchivedException;
 import com.algaworks.algashop.ordering.core.domain.model.customer.CustomerNotFoundException;
 import com.algaworks.algashop.ordering.core.domain.model.customer.CustomerRegisteredEvent;
+import com.algaworks.algashop.ordering.core.ports.out.customer.ForObtainingCustomers;
 import com.algaworks.algashop.ordering.infrastructure.adapters.in.listener.customer.CustomerEventListener;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -36,7 +36,7 @@ class CustomerManagementApplicationServiceIT extends AbstractApplicationIT {
     private ForNotifyingCustomers customerNotificationService;
 
     @Autowired
-    private CustomerQueryService customerQueryService;
+    private ForObtainingCustomers customerQueryService;
 
 
     @Test

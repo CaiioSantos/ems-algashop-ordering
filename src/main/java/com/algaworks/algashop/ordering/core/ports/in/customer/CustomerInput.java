@@ -1,6 +1,7 @@
 package com.algaworks.algashop.ordering.core.ports.in.customer;
 
-import com.algaworks.algashop.ordering.core.application.commons.AddressData;
+
+import com.algaworks.algashop.ordering.core.ports.in.commons.AddressData;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
