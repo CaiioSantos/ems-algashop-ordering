@@ -25,8 +25,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
 
-@Service
-@RequiredArgsConstructor
+//@Service
+//@RequiredArgsConstructor
 public class BuyNowApplicationService implements ForBuyingProduct {
 
     private final BuyNowService buyNowService;
@@ -40,6 +40,22 @@ public class BuyNowApplicationService implements ForBuyingProduct {
 
     private final ShippingInputDisassembler shippingInputDisassembler;
     private final BillingInputDisassembler billingInputDisassembler;
+
+
+    public BuyNowApplicationService(BuyNowService buyNowService, ProductCatalogService productCatalogService,
+                                    ShippingCostService shippingCostService, OriginAddressService originAddressService,
+                                    Orders orders, Customers customers,
+                                    ShippingInputDisassembler shippingInputDisassembler,
+                                    BillingInputDisassembler billingInputDisassembler) {
+        this.buyNowService = buyNowService;
+        this.productCatalogService = productCatalogService;
+        this.shippingCostService = shippingCostService;
+        this.originAddressService = originAddressService;
+        this.orders = orders;
+        this.customers = customers;
+        this.shippingInputDisassembler = shippingInputDisassembler;
+        this.billingInputDisassembler = billingInputDisassembler;
+    }
 
     @Transactional
     public String buyNow(BuyNowInput input) {

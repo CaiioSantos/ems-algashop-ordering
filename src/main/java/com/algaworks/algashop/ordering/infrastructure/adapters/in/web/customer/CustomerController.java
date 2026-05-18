@@ -1,5 +1,8 @@
 package com.algaworks.algashop.ordering.infrastructure.adapters.in.web.customer;
 
+import com.algaworks.algashop.ordering.core.application.customer.CustomerManagementApplicationService;
+import com.algaworks.algashop.ordering.core.application.customer.CustomerQueryService;
+import com.algaworks.algashop.ordering.core.application.shoppingcart.ShoppingCartQueryService;
 import com.algaworks.algashop.ordering.core.ports.in.customer.*;
 import com.algaworks.algashop.ordering.core.ports.in.shoppingcart.ForQueryingShoppingCarts;
 import com.algaworks.algashop.ordering.core.ports.in.shoppingcart.ShoppingCartOutput;
@@ -23,7 +26,7 @@ public class CustomerController {
 
     private final ForManagingCustomers forManagingCustomers;
     private final ForQueryingCustomers forQueryingCustomers;
-    private final ForQueryingShoppingCarts shoppingCartQueryService;
+    private final ForQueryingShoppingCarts forQueryingShoppingCarts;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -48,7 +51,7 @@ public class CustomerController {
 
     @GetMapping("/{customerId}/shopping-cart")
     public ShoppingCartOutput findShoppingCartCustomerId(@PathVariable UUID customerId){
-        return shoppingCartQueryService.findByCustomerId(customerId);
+        return forQueryingShoppingCarts.findByCustomerId(customerId);
     }
 
     @PutMapping("/{customerId}")
