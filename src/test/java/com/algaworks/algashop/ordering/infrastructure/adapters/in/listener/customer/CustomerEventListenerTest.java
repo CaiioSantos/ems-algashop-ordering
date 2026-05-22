@@ -40,6 +40,7 @@ class CustomerEventListenerTest extends AbstractApplicationIT {
 
     @Test
      void shouldListenOrderReadyEvent() {
+
         applicationEventPublisher.publishEvent(
                 new OrderReadyEvent(
                         CustomerTestDataBuilder.DEFAULT_CUSTOMER_ID,
