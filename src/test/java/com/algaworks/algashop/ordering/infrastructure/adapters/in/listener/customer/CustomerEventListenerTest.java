@@ -32,15 +32,16 @@ class CustomerEventListenerTest extends AbstractApplicationIT {
     private CustomerEventListener customerEventListener;
 
     @MockitoBean
+    private ForNotifyingCustomers forNotifyingCustomers;
+
+    @MockitoBean
     private ForNotifyingCustomers customerNotificationService;
 
     @MockitoBean
     private ForAddingLoyaltypoints customerLoyaltyPointsApplicationService;
 
-
     @Test
-     void shouldListenOrderReadyEvent() {
-
+    public void shouldListenOrderReadyEvent() {
         applicationEventPublisher.publishEvent(
                 new OrderReadyEvent(
                         CustomerTestDataBuilder.DEFAULT_CUSTOMER_ID,
@@ -58,19 +59,20 @@ class CustomerEventListenerTest extends AbstractApplicationIT {
     }
 
     @Test
-     void shouldListenCustomerRegisteredEvent() {
+    public void shouldListenCustomerRegisteredEvent() {
         applicationEventPublisher.publishEvent(
                 new CustomerRegisteredEvent(
                         CustomerTestDataBuilder.DEFAULT_CUSTOMER_ID,
                         OffsetDateTime.now(),
                         new FullName("John", "Doe"),
                         new Email("john.doe@email.com")
-
                 )
         );
 
-        Mockito.verify(customerEventListener).listen(Mockito.any(CustomerRegisteredEvent.class));
-        Mockito.verify(customerNotificationService).notifyNewRegistration(
-                Mockito.any(NotifyNewRegistrationInput.class));
+        Mockito.verify(customerEventListener)
+                .listen(Mockito.any(CustomerRegisteredEvent.class));
+
+        Mockito.verify(customerNotificationService)
+                .notifyNewRegistration(Mockito.any(NotifyNewRegistrationInput.class));
     }
 }
