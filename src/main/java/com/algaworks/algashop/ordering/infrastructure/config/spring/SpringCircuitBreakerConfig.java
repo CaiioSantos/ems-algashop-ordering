@@ -29,6 +29,12 @@ public class SpringCircuitBreakerConfig {
                     .openTimeout(Duration.ofSeconds(10))
                     .resetTimeout(Duration.ofSeconds(25))
                     .build(), "productCatalogCB");
+
+            factory.configure(builder -> builder
+                    .retryPolicy(retryPolicy)
+                    .openTimeout(Duration.ofSeconds(10))
+                    .resetTimeout(Duration.ofSeconds(25))
+                    .build(), "shippingCostCB");
         };
     }
 }
