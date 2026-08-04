@@ -38,6 +38,8 @@ public class OrderPersistenceEntityAssembler {
         orderPersistenceEntity.setReadyAt(order.readyAt());
         orderPersistenceEntity.setVersion(order.version());
         orderPersistenceEntity.addEvents(order.domainEvents());
+        orderPersistenceEntity.setBilling(toBillingEmbeddable(order.billing()));
+        orderPersistenceEntity.setShipping(toShippingEmbeddable(order.shipping()));
 
         if (order.creditCardId() != null) {
             orderPersistenceEntity.setCreditCardId(order.creditCardId().id());

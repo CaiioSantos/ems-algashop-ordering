@@ -27,17 +27,20 @@ public class ResilientRapiDexAPIClient {
     private final FrameworkRetryCircuitBreaker circuitBreaker;
 
     public ResilientRapiDexAPIClient(CircuitBreakerFactory<FrameworkRetryConfig,
-                                        FrameworkRetryConfigBuilder> circuitBreakerFactory,
+                                             FrameworkRetryConfigBuilder> circuitBreakerFactory,
                                      RapiDexAPIClient rapiDexAPIClient) {
         this.rapiDexAPIClient = rapiDexAPIClient;
-        this.circuitBreaker = (FrameworkRetryCircuitBreaker) circuitBreakerFactory.create("rapidexAPICB");
+        this.circuitBreaker = (FrameworkRetryCircuitBreaker) circuitBreakerFactory.create("shippingCostCB");
     }
 
     @ConcurrencyLimit(15)
     public DeliveryCostResponse calculate(DeliveryCostRequest request) {
         log.info("RapidexAPI CircuitBreaker state is {}", circuitBreaker.getCircuitBreakerPolicy().getState());
         try {
-            DeliveryCostResponse response = circuitBreaker.run(() -> doCalculate(request));
+            DeliveryCostResponse response = circuitBreaker.run(
+                    () -> doCalculate(request),
+                    ex -> doInternalFallback(request, ex)
+                    );
             if (response == null) {
                 throw new BadGatewayException.ClientErrorException("Invalid zip code provided");
             }
@@ -45,6 +48,11 @@ public class ResilientRapiDexAPIClient {
         } catch (NoFallbackAvailableException e) {
             throw unwrapException(e);
         }
+    }
+
+    private DeliveryCostResponse doInternalFallback(DeliveryCostRequest request, Throwable ex) {
+        log.warn("Rapidex API fallback for request: {}", request, ex);
+        return new DeliveryCostResponse("20.00", 10L);
     }
 
     private RuntimeException unwrapException(NoFallbackAvailableException e) {

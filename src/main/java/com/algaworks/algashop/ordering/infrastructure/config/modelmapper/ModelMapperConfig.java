@@ -23,8 +23,8 @@ import java.time.LocalDate;
 public class ModelMapperConfig {
 
     private static final Converter<FullName, String> fullNameToFirstNameConverter =
-            context -> {
-                FullName fullName = context.getSource();
+            mappingContext -> {
+                FullName fullName = mappingContext.getSource();
                 if (fullName == null) {
                     return null;
                 }
@@ -32,8 +32,8 @@ public class ModelMapperConfig {
             };
 
     private static final Converter<FullName, String> fullNameToLastNameConverter =
-            context -> {
-                FullName fullName = context.getSource();
+            mappingContext -> {
+                FullName fullName = mappingContext.getSource();
                 if (fullName == null) {
                     return null;
                 }
@@ -41,8 +41,8 @@ public class ModelMapperConfig {
             };
 
     private static final Converter<BirthDate, LocalDate> birthDateToLocalDateConverter =
-            context -> {
-                BirthDate birthDate = context.getSource();
+            mappingContext -> {
+                BirthDate birthDate = mappingContext.getSource();
                 if (birthDate == null) {
                     return null;
                 }
@@ -50,18 +50,18 @@ public class ModelMapperConfig {
             };
 
     private static final Converter<Long, String> longToStringTSIDConverter =
-            context -> {
-                Long tsIdAsLong = context.getSource();
-                if (tsIdAsLong == null) {
+            mappingContext -> {
+                Long tsidAsLong = mappingContext.getSource();
+                if (tsidAsLong == null) {
                     return null;
                 }
-                return new TSID(tsIdAsLong).toString();
+                return new TSID(tsidAsLong).toString();
             };
 
     @Bean
     public Mapper mapper() {
         ModelMapper modelMapper = new ModelMapper();
-        this.configuration(modelMapper);
+        configuration(modelMapper);
         return modelMapper::map;
     }
 
@@ -74,27 +74,28 @@ public class ModelMapperConfig {
         modelMapper.createTypeMap(Customer.class, CustomerOutput.class)
                 .addMappings(mapping ->
                         mapping.using(fullNameToFirstNameConverter)
-                                .map(Customer::fullName,CustomerOutput::setFirstName))
+                                .map(Customer::fullName, CustomerOutput::setFirstName))
                 .addMappings(mapping ->
                         mapping.using(fullNameToLastNameConverter)
-                                .map(Customer::fullName,CustomerOutput::setLastName))
+                                .map(Customer::fullName, CustomerOutput::setLastName))
                 .addMappings(mapping ->
                         mapping.using(birthDateToLocalDateConverter)
-                                .map(Customer::birthDate,CustomerOutput::setBirthDate));
-        modelMapper.createTypeMap(OrderPersistenceEntity.class, OrderDetailOutput.class)
-                .addMappings(mapping -> {
-                    mapping.using(longToStringTSIDConverter)
-                            .map(OrderPersistenceEntity::getId, OrderDetailOutput::setId);
-                });
-        modelMapper.createTypeMap(OrderItemPersistenceEntity.class, OrderItemDetailOutput.class)
-                .addMappings(mapping -> {
-                    mapping.using(longToStringTSIDConverter)
-                            .map(OrderItemPersistenceEntity::getId, OrderItemDetailOutput::setId);
-                })
-                .addMappings(mapping -> {
-                    mapping.using(longToStringTSIDConverter)
-                            .map(OrderItemPersistenceEntity::getOrderId, OrderItemDetailOutput::setOrderId);
-                });
-    }
-}
+                                .map(Customer::birthDate, CustomerOutput::setBirthDate));
 
+        modelMapper.createTypeMap(OrderPersistenceEntity.class, OrderDetailOutput.class)
+                .addMappings(mapping ->
+                        mapping.using(longToStringTSIDConverter)
+                                .map(OrderPersistenceEntity::getId, OrderDetailOutput::setId));
+
+        modelMapper.createTypeMap(OrderItemPersistenceEntity.class, OrderItemDetailOutput.class)
+                .addMappings(mapping ->
+                        mapping.using(longToStringTSIDConverter)
+                                .map(OrderItemPersistenceEntity::getId, OrderItemDetailOutput::setId))
+                .addMappings(mapping ->
+                        mapping.using(longToStringTSIDConverter)
+                                .map(OrderItemPersistenceEntity::getOrderId, OrderItemDetailOutput::setOrderId));
+
+
+    }
+
+}
