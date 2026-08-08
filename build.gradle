@@ -58,6 +58,7 @@ dependencies {
     implementation 'org.modelmapper:modelmapper:3.2.6'
     implementation 'org.springframework.boot:spring-boot-starter-cache'
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
     implementation 'org.springframework.cloud:spring-cloud-starter-circuitbreaker-framework-retry'
 

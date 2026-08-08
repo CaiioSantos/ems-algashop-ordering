@@ -19,6 +19,8 @@ import org.springframework.web.client.RestClientException;
 
 import java.net.SocketTimeoutException;
 
+import static com.algaworks.algashop.ordering.infrastructure.config.resilience.SpringCircuitBreakerConfig.SHIPPING_COST_CB;
+
 @Component
 @Slf4j
 public class ResilientRapiDexAPIClient {
@@ -30,7 +32,7 @@ public class ResilientRapiDexAPIClient {
                                              FrameworkRetryConfigBuilder> circuitBreakerFactory,
                                      RapiDexAPIClient rapiDexAPIClient) {
         this.rapiDexAPIClient = rapiDexAPIClient;
-        this.circuitBreaker = (FrameworkRetryCircuitBreaker) circuitBreakerFactory.create("shippingCostCB");
+        this.circuitBreaker = (FrameworkRetryCircuitBreaker) circuitBreakerFactory.create(SHIPPING_COST_CB);
     }
 
     @ConcurrencyLimit(15)

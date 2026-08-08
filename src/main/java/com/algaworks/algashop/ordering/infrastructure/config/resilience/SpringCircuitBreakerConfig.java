@@ -1,4 +1,4 @@
-package com.algaworks.algashop.ordering.infrastructure.config.spring;
+package com.algaworks.algashop.ordering.infrastructure.config.resilience;
 
 import com.algaworks.algashop.ordering.infrastructure.config.exceptionhandler.BadGatewayException;
 import com.algaworks.algashop.ordering.infrastructure.config.exceptionhandler.GatewayTimeoutException;
@@ -13,6 +13,8 @@ import java.time.Duration;
 @Configuration
 public class SpringCircuitBreakerConfig {
 
+    public static final String PRODUCT_CATALOG_CB = "productCatalogCB";
+    public static final String SHIPPING_COST_CB = "shippingCostCB";
 
     @Bean
     public Customizer<FrameworkRetryCircuitBreakerFactory> defaultCustomizer() {
@@ -28,13 +30,13 @@ public class SpringCircuitBreakerConfig {
                     .retryPolicy(retryPolicy)
                     .openTimeout(Duration.ofSeconds(10))
                     .resetTimeout(Duration.ofSeconds(25))
-                    .build(), "productCatalogCB");
+                    .build(), PRODUCT_CATALOG_CB);
 
             factory.configure(builder -> builder
                     .retryPolicy(retryPolicy)
                     .openTimeout(Duration.ofSeconds(10))
                     .resetTimeout(Duration.ofSeconds(25))
-                    .build(), "shippingCostCB");
+                    .build(), SHIPPING_COST_CB);
         };
     }
 }

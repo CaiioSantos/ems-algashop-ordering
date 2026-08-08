@@ -3,7 +3,6 @@ package com.algaworks.algashop.ordering.infrastructure.adapters.out.web.product.
 
 import com.algaworks.algashop.ordering.infrastructure.config.exceptionhandler.BadGatewayException;
 import com.algaworks.algashop.ordering.infrastructure.config.exceptionhandler.GatewayTimeoutException;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cloud.client.circuitbreaker.CircuitBreaker;
@@ -11,7 +10,6 @@ import org.springframework.cloud.client.circuitbreaker.CircuitBreakerFactory;
 import org.springframework.cloud.client.circuitbreaker.NoFallbackAvailableException;
 import org.springframework.core.retry.RetryException;
 import org.springframework.resilience.annotation.ConcurrencyLimit;
-import org.springframework.resilience.annotation.Retryable;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
@@ -22,6 +20,8 @@ import java.net.SocketTimeoutException;
 import java.util.Optional;
 import java.util.UUID;
 
+import static com.algaworks.algashop.ordering.infrastructure.config.resilience.SpringCircuitBreakerConfig.PRODUCT_CATALOG_CB;
+
 @Component
 @Slf4j
 public class ResilientProductCatalogAPIClient {
@@ -31,7 +31,7 @@ public class ResilientProductCatalogAPIClient {
 
     public ResilientProductCatalogAPIClient(ProductCatalogAPIClient productCatalogAPIClient,  CircuitBreakerFactory circuitBreakerFactory) {
         this.productCatalogAPIClient = productCatalogAPIClient;
-        this.circuitBreaker = circuitBreakerFactory.create("productCatalogCB");;
+        this.circuitBreaker = circuitBreakerFactory.create(PRODUCT_CATALOG_CB);
     }
 
     @Cacheable(value = "algashop:product-catalog-api:v1", key = "#productId")
