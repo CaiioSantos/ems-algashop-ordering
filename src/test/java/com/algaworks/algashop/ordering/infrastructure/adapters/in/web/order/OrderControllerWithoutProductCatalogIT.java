@@ -10,10 +10,13 @@ import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.TestPropertySource;
 
 import java.util.UUID;
 
-
+@TestPropertySource(properties = {
+        "algashop.integrations.product-catalog.url=http://localhost:9999"
+})
 public class OrderControllerWithoutProductCatalogIT extends AbstractPresentationIT {
 
 
@@ -49,8 +52,7 @@ public class OrderControllerWithoutProductCatalogIT extends AbstractPresentation
 
         wireMockProductCatalog.stop();
 
-        RestAssured
-                .given()
+        givenAuthenticated()
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .contentType("application/vnd.order-with-product.v1+json")
                 .body(json)

@@ -1,13 +1,15 @@
 package com.algaworks.algashop.ordering.infrastructure.adapters.in.web.shoppingcart;
 
+import com.algaworks.algashop.ordering.infrastructure.adapters.in.web.AbstractPresentationIT;
 import com.algaworks.algashop.ordering.infrastructure.adapters.out.persistence.customer.CustomerPersistenceEntityRepository;
 import com.algaworks.algashop.ordering.infrastructure.adapters.out.persistence.shoppingcart.ShoppingCartPersistenceEntityRepository;
-import com.algaworks.algashop.ordering.infrastructure.adapters.in.web.AbstractPresentationIT;
 import com.algaworks.algashop.ordering.utils.AlgaShopResourceUtils;
-import io.restassured.RestAssured;
 import org.assertj.core.api.Assertions;
 import org.hamcrest.Matchers;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
@@ -48,8 +50,7 @@ public class ShoppingCartControllerIT extends AbstractPresentationIT {
     public void shouldCreateShoppingCart() {
         String json = AlgaShopResourceUtils.readContent("json/create-shopping-cart.json");
 
-        UUID createCustomerId = RestAssured
-                .given()
+        UUID createdShoppingCartId = givenAuthenticated()
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .body(json)
@@ -61,10 +62,13 @@ public class ShoppingCartControllerIT extends AbstractPresentationIT {
                 .statusCode(HttpStatus.CREATED.value())
                 .body("id", Matchers.not(Matchers.emptyString()))
                 .extract()
-                .jsonPath().getUUID("id");
+                .jsonPath()
+                .getUUID("id");
 
-        boolean customerExists = shoppingCartPersistenceEntityRepository.existsById(createCustomerId);
-        Assertions.assertThat(customerExists).isTrue();
+        boolean shoppingCartExists =
+                shoppingCartPersistenceEntityRepository.existsById(createdShoppingCartId);
+
+        Assertions.assertThat(shoppingCartExists).isTrue();
 
     }
 
@@ -72,8 +76,7 @@ public class ShoppingCartControllerIT extends AbstractPresentationIT {
     public void shouldAddProductToShoppingCart() {
         String json = AlgaShopResourceUtils.readContent("json/add-product-shopping-cart.json");
 
-        RestAssured
-                .given()
+        givenAuthenticated()
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .body(json)

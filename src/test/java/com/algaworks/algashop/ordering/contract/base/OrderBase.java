@@ -16,6 +16,7 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
@@ -37,6 +38,9 @@ public class OrderBase {
 
     @MockitoBean
     private CheckoutApplicationService checkoutApplicationService;
+
+    @MockitoBean
+    private JwtDecoder jwtDecoder;
 
     public static final String validOrderId = "01226N0640J7Q";
 

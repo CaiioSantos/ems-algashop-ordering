@@ -1,5 +1,6 @@
 package com.algaworks.algashop.ordering.core.domain.model;
 
+import com.algaworks.algashop.ordering.utils.MockJwtDecoderConfig;
 import com.algaworks.algashop.ordering.utils.TestContainerPostgresSqlConfig;
 import org.springframework.boot.jdbc.test.autoconfigure.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -11,7 +12,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Testcontainers
-@Import(TestContainerPostgresSqlConfig.class)
+@Import({TestContainerPostgresSqlConfig.class, MockJwtDecoderConfig.class})
 public abstract class AbstractDomainIT {
 }
 
