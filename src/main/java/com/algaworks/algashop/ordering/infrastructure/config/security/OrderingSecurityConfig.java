@@ -26,7 +26,8 @@ public class OrderingSecurityConfig {
                         .requestMatchers("/api/v1/webhooks/**").permitAll()
                         .anyRequest().authenticated()
                 )
-                .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()));
+                .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()))
+                .oauth2Client(Customizer.withDefaults());
 
         return http.build();
     }
