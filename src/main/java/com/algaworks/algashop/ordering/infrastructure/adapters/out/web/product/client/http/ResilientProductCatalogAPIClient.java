@@ -5,6 +5,9 @@ import com.algaworks.algashop.ordering.infrastructure.config.exceptionhandler.Ba
 import com.algaworks.algashop.ordering.infrastructure.config.exceptionhandler.GatewayTimeoutException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cloud.circuitbreaker.retry.FrameworkRetryCircuitBreaker;
+import org.springframework.cloud.circuitbreaker.retry.FrameworkRetryConfig;
+import org.springframework.cloud.circuitbreaker.retry.FrameworkRetryConfigBuilder;
 import org.springframework.cloud.client.circuitbreaker.CircuitBreaker;
 import org.springframework.cloud.client.circuitbreaker.CircuitBreakerFactory;
 import org.springframework.cloud.client.circuitbreaker.NoFallbackAvailableException;
@@ -21,20 +24,24 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static com.algaworks.algashop.ordering.infrastructure.config.resilience.SpringCircuitBreakerConfig.PRODUCT_CATALOG_CB;
+import static org.aspectj.util.LangUtil.unwrapException;
 
 @Component
 @Slf4j
 public class ResilientProductCatalogAPIClient {
 
     private final ProductCatalogAPIClient productCatalogAPIClient;
-    private final CircuitBreaker  circuitBreaker;
+    private final FrameworkRetryCircuitBreaker circuitBreaker;
 
-    public ResilientProductCatalogAPIClient(ProductCatalogAPIClient productCatalogAPIClient,  CircuitBreakerFactory circuitBreakerFactory) {
+    public ResilientProductCatalogAPIClient(CircuitBreakerFactory<FrameworkRetryConfig,
+                                                    FrameworkRetryConfigBuilder> circuitBreakerFactory,
+                                            ProductCatalogAPIClient productCatalogAPIClient) {
         this.productCatalogAPIClient = productCatalogAPIClient;
-        this.circuitBreaker = circuitBreakerFactory.create(PRODUCT_CATALOG_CB);
+        this.circuitBreaker = (FrameworkRetryCircuitBreaker) circuitBreakerFactory.create(PRODUCT_CATALOG_CB);
     }
 
-    @Cacheable(value = "algashop:product-catalog-api:v1", key = "#productId")
+    @Cacheable(value = "algashop:product-catalog-api:v1",
+            key = "#productId", unless = "#result == null")
     @ConcurrencyLimit(10)
     public Optional<ProductResponse> getById(UUID productId) {
         log.info("Trying to load product {}", productId);
@@ -57,10 +64,7 @@ public class ResilientProductCatalogAPIClient {
         log.info("Loading product {}", productId);
         try {
             return Optional.ofNullable(productCatalogAPIClient.getById(productId));
-        } catch (HttpClientErrorException e) {
-            if (!(e instanceof HttpClientErrorException.NotFound)) {
-                log.error("Client HTTP error when loading product {}", productId, e);
-            }
+        } catch (HttpClientErrorException.NotFound e) {
             return Optional.empty();
         } catch (RestClientException e) {
             throw translateException(e);
