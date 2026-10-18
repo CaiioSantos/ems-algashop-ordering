@@ -72,6 +72,7 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.cloud:spring-cloud-starter-contract-verifier'
     testImplementation 'org.springframework.boot:spring-boot-starter-security-oauth2-resource-server-test'
+    testImplementation 'io.rest-assured:spring-mock-mvc'
     constraints {
         testImplementation('io.rest-assured:rest-assured:6.0.0') {
             version {
